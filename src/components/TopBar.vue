@@ -2,6 +2,9 @@
   <div class="top-bar">
     <!-- 左侧Logo/标题 -->
     <div class="left-section">
+      <el-icon size="30px" @click="isSidebarVisible.toggle()" class="sidebar-toggle-icon">
+        <Operation />
+      </el-icon>
       <el-icon size="30px" v-if="!is_homepage.get()" @click="goToHome()" class="back-icon"><Back /></el-icon>
       <span class="system-name">{{ pageTitle }}</span>
     </div>
@@ -31,11 +34,12 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { ArrowDown } from '@element-plus/icons-vue'
+import { ArrowDown, Back, Operation } from '@element-plus/icons-vue'
 import { inject, computed } from 'vue'
 
 const router = useRouter()
 const is_homepage = inject('is_homepage')
+const isSidebarVisible = inject('is_sidebar_visible')
 const userName = inject('user_name')
 const userAvatar = inject('user_avatar')
 
@@ -116,6 +120,17 @@ const pageTitle = computed(() => {
   align-items: center;
 }
 
+.sidebar-toggle-icon {
+  cursor: pointer;
+  margin-right: 15px;
+  color: white;
+}
+
+.sidebar-toggle-icon:hover {
+  opacity: 0.7;
+  transition: all 0.2s;
+}
+
 .system-name {
   font-size: 24px;
   font-weight: bold;
@@ -162,6 +177,7 @@ const pageTitle = computed(() => {
 .back-icon {
   cursor: pointer;
   margin-right: 15px;
+  margin-left: 7px;
 }
 
 .back-icon:hover {
