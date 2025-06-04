@@ -11,6 +11,10 @@ export default defineConfig({
         target: 'http://localhost:8080',
         changeOrigin: true,
       },
+      '/test': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      },
     },
     // front end port
     port: 3000,

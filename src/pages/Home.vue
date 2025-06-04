@@ -206,7 +206,7 @@
     <div v-if="activeModule.get() === 'onlineQuiz'">
       <div style="display: flex;flex-wrap: wrap; justify-content: start;">
         <!-- 学生的界面 -->
-        <el-button class="cardBox" @click="goToSearchTest()" v-if="user == 'student'">
+        <el-button class="cardBox" @click="goToQueryTest()" v-if="user == 'student'">
           <div>
             <div style="font-size: 28px;font-weight: bold;">考试查询</div>
             <el-divider />
@@ -413,9 +413,9 @@ function goToSearchResult() {
   is_homepage.set(false);
   router.push('/online_test/searchResult');
 }
-function goToSearchTest() {
+function goToQueryTest() {
   is_homepage.set(false);
-  router.push('/online_test/searchTest');
+  router.push('/online_test/queryTest');
 }
 function goToUploadResource() {
   is_homepage.set(false);
