@@ -27,6 +27,9 @@ import ManageTest from '../pages/online_test/teacher/ManageTest.vue'
 import SearchAnalysis from '../pages/online_test/teacher/SearchAnalysis.vue'
 import SearchResult from '../pages/online_test/student/SearchResult.vue'
 import SearchTest from '../pages/online_test/student/SearchTest.vue'
+import Test from '../pages/online_test/student/Test.vue'
+import EnterTest from '../pages/online_test/student/enterTest.vue'
+import QueryTest from '../pages/online_test/student/queryTest.vue'
 // 资源共享
 import UploadResource from '../pages/resource_share/student/UploadResource.vue'
 import Homework from '../pages/resource_share/student/Homework.vue'
@@ -84,6 +87,9 @@ const router = createRouter({
         {  path: '/online_test/searchAnalysis', component: SearchAnalysis },
         { path: '/online_test/searchResult', component: SearchResult},
         { path: '/online_test/searchTest', component: SearchTest},
+        { path: '/online_test/enterTest/:test_id', name: 'enterTest', component: EnterTest, props: true },
+        { path: '/online_test/test/:test_id', name: 'Test', component: Test, props: true },
+        { path: '/online_test/queryTest', component: QueryTest },
 
         { path: '/resource_sharing/uploadResource', component: UploadResource },
         { path: '/resource_sharing/homework', component: Homework },
