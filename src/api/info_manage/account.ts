@@ -1,4 +1,4 @@
-import apiClient from "@/request";
+import apiClient from "./request";
 
 //获取当前用户信息
 export const getCurrentUserProfile = async () => {

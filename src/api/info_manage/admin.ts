@@ -1,4 +1,4 @@
-import apiClient from "@/request";
+import apiClient from "./request";
 
 // 获取用户列表接口
 export const getUsers = async (params: any) => {

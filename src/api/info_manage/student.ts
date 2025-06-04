@@ -1,11 +1,11 @@
-import apiClient from "@/request";
+import apiClient from "./request";
 
 // 学生查询自己的成绩
 export const getStudentGrades = async (params: any) => {
   return await apiClient.request({
     url: "/student/grades",
     method: "GET",
-    params: params,
+    params: params, 
   });
 };
 

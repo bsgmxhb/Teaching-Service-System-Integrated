@@ -1,4 +1,4 @@
-import apiClient from "@/request";
+import apiClient from "./request";
 
 export const login = async (credential: any) => {
   return await apiClient.request({

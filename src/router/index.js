@@ -38,8 +38,6 @@ import AdminDashboard from "../pages/info_manage/admin/Admin_Dashboard.vue";
 import AdminCourseManagement from "../pages/info_manage/admin/Admin_CourseManagement.vue";
 import AdminUserManagement from "../pages/info_manage/admin/Admin_UserManagement.vue";
 import AdminProfile from "../pages/info_manage/admin/Admin-Profile.vue";
-import ChangePassword from "../pages/ChangePassword.vue";
-import QueryCourse from "../pages/info_manage/Query_Course.vue";
 import StudentDashboard from "../pages/info_manage/student/Student_Dashboard.vue";
 import StudentGradeAnalysis from "../pages/info_manage/student/Student_GradeAnalysis.vue";
 import StudentProfile from "../pages/info_manage/student/Student_Profile.vue";
@@ -55,6 +53,7 @@ import TeacherTaughtCourses from "../pages/info_manage/teacher/Teacher_TaughtCou
 
 import Home from '../pages/Home.vue'
 import Login from '../pages/Login.vue'
+import ChangePassword from '../pages/ChangePassword.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -62,6 +61,7 @@ const router = createRouter({
         { path: '/', redirect: '/login' },
         { path: '/home', component: Home },
         { path: '/login', component: Login },
+        { path: '/changePassword', component: ChangePassword },
         { path: '/course_selection/chooseCurriculum', component: ChooseCurriculum },
         { path: '/course_selection/showCurriculum', component: ShowCurriculum },
         { path: '/course_selection/searchCourse', component: SearchCourse },
@@ -101,7 +101,6 @@ const router = createRouter({
         { path: '/info_manage/admin/Admin_UserManagement', component: AdminUserManagement },
         { path: '/info_manage/admin/Admin_Profile', component: AdminProfile },
         { path: '/ChangePassword', component: ChangePassword },
-        { path: '/info_manage/Query_Course', component: QueryCourse },
         { path: '/info_manage/student/Student_Dashboard', component: StudentDashboard },
         { path: '/info_manage/student/Student_GradeAnalysis', component: StudentGradeAnalysis },
         { path: '/info_manage/student/Student_Profile', component: StudentProfile },

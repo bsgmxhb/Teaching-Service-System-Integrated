@@ -1,42 +1,5 @@
 <template>
   <div class="home">
-    <div class="top-bar">
-      <div class="left-section">
-        <router-link
-          to="../admin/dashboard"
-          class="back-icon"
-          id="backToAdminDashboard"
-        >
-          <FontAwesomeIcon icon="fas fa-arrow-left" />
-        </router-link>
-        <span class="system-name">教学服务系统</span>
-        <span class="system-subname">信息管理子系统 - 成绩修改审核</span>
-      </div>
-      <div class="right-section">
-        <div class="user-info" id="userInfoToggle" @click="toggleUserDropdown">
-          <div class="user-avatar">
-            <FontAwesomeIcon icon="fas fa-user-shield" />
-          </div>
-          <span class="user-name" id="approveGradeAdminName">{{
-            loginUserStore.loginUser.name
-          }}</span>
-          <FontAwesomeIcon
-            :icon="
-              userDropdownVisible ? 'fas fa-angle-up' : 'fas fa-angle-down'
-            "
-          />
-        </div>
-        <div
-          class="user-dropdown-menu"
-          id="userDropdown"
-          :style="{ display: userDropdownVisible ? 'block' : 'none' }"
-        >
-          <a @click="handleChangePassword">修改密码</a>
-          <div class="divider"></div>
-          <a @click="handleLogout">退出登录</a>
-        </div>
-      </div>
-    </div>
 
     <!-- Main Content -->
     <main class="page-main">
@@ -327,21 +290,14 @@
       </div>
     </main>
 
-    <!-- Bottom Bar -->
-    <div class="bottom-bar">
-      <p class="copyright-text">
-        版权所有© Copyright 2025 浙江大学 软件工程基础课程 教学服务系统课程设计
-        信息管理子系统
-      </p>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { getAdminGradeApplies, reviewGradeApply } from "@/api/admin";
-import { useuserLoginStore } from "@/store/userLoginStore";
+import { getAdminGradeApplies, reviewGradeApply } from "../../../api/info_manage/admin";
+import { useuserLoginStore } from "../../../store/userLoginStore";
 import { useRouter } from "vue-router";
 
 // 定义申请记录的类型接口
@@ -413,21 +369,6 @@ onMounted(() => {
 // 切换用户下拉菜单
 const toggleUserDropdown = () => {
   userDropdownVisible.value = !userDropdownVisible.value;
-};
-
-// 处理退出登录
-const handleLogout = () => {
-  showNotification("正在退出登录...", "info");
-  setTimeout(() => {
-    loginUserStore.setLoginUserUnlogin();
-    router.push("/login");
-  }, 1500);
-};
-
-// 处理修改密码
-const handleChangePassword = () => {
-  //window.location.href = "../change-password";
-  router.push("/change-password");
 };
 
 const filterAndDisplayApplications = async () => {
@@ -541,7 +482,7 @@ const rejectApplication = async () => {
   }
 };
 
-const showNotification = (message: string, type: "info") => {
+const showNotification = (message: string, type: "info" | "success" | "error") => {
   notification.value = {
     message,
     type,

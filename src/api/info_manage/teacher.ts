@@ -1,4 +1,4 @@
-import apiClient from "@/request";
+import apiClient from "./request";
 
 // 教师提交学生成绩
 export const submitStudentGrades = async (sectionId: any, data: any) => {

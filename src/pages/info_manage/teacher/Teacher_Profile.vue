@@ -1,47 +1,5 @@
 <template>
   <div>
-    <div class="top-bar">
-      <div class="left-section">
-        <router-link to="../dashboard" class="back-icon" id="backToDashboard">
-          <FontAwesomeIcon icon="fas fa-arrow-left" />
-        </router-link>
-        <span class="system-name">教学服务系统</span>
-        <span class="system-subname">信息管理子系统 - 个人信息</span>
-      </div>
-      <div class="right-section">
-        <div class="user-info" id="userInfoToggle" @click="toggleUserDropdown">
-          <!-- 显示头像 -->
-          <div class="user-avatar">
-            <img
-              v-if="studentProfileData.avatarPath"
-              :src="getAvatarUrl(studentProfileData.avatarPath)"
-              alt="User Avatar"
-              class="avatar-img"
-            />
-            <img
-              v-else
-              :src="defaultAvatar"
-              alt="User Avatar"
-              class="avatar-img"
-            />
-            <!--            <FontAwesomeIcon v-else icon="fas fa-user" />-->
-          </div>
-          <span class="user-name" id="profileUserName">{{
-            studentProfileData.name
-          }}</span>
-          <FontAwesomeIcon icon="fas fa-angle-down" />
-        </div>
-        <div
-          class="user-dropdown-menu"
-          id="userDropdown"
-          :style="{ display: userDropdownVisible ? 'block' : 'none' }"
-        >
-          <a @click="handleChangePassword">修改密码</a>
-          <div class="divider"></div>
-          <a @click="handleLogout">退出登录</a>
-        </div>
-      </div>
-    </div>
 
     <!-- Main Content -->
     <main class="page-main">
@@ -175,13 +133,7 @@
       </div>
     </main>
 
-    <!-- Bottom Bar -->
-    <div class="bottom-bar">
-      <p class="copyright-text">
-        版权所有© Copyright 2025 浙江大学 软件工程基础课程 教学服务系统课程设计
-        信息管理子系统
-      </p>
-    </div>
+
   </div>
 </template>
 <script setup lang="ts">
@@ -190,10 +142,10 @@ import {
   getCurrentUserProfile,
   updateCurrentUserProfile,
   uploadAvatar,
-} from "@/api/account";
-import { useuserLoginStore } from "@/store/userLoginStore";
+} from "../../../api/info_manage/account";
+import { useuserLoginStore } from "../../../store/userLoginStore";
 import { useRouter } from "vue-router";
-import defaultAvatar from "@/assets/defaultAvatar.png";
+import defaultAvatar from "../../../assets/defaultAvatar.png";
 
 const router = useRouter();
 const loginUserStore = useuserLoginStore();

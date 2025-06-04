@@ -1,43 +1,5 @@
 <template>
   <div>
-    <!-- Top Bar -->
-    <div class="top-bar">
-      <div class="left-section">
-        <router-link
-          to="../teacher/dashboard"
-          class="back-icon"
-          id="backToTeacherDashboard"
-        >
-          <FontAwesomeIcon icon="fas fa-arrow-left" />
-        </router-link>
-        <span class="system-name">教学服务系统</span>
-        <span class="system-subname">信息管理子系统 - 成绩提交</span>
-      </div>
-      <div class="right-section">
-        <div class="user-info" id="userInfoToggle" @click="toggleUserDropdown">
-          <div class="user-avatar">
-            <FontAwesomeIcon icon="fas fa-user-shield" />
-          </div>
-          <span class="user-name" id="approveGradeAdminName">{{
-            loginUserStore.loginUser.name
-          }}</span>
-          <FontAwesomeIcon
-            :icon="
-              userDropdownVisible ? 'fas fa-angle-up' : 'fas fa-angle-down'
-            "
-          />
-        </div>
-        <div
-          class="user-dropdown-menu"
-          id="userDropdown"
-          :style="{ display: userDropdownVisible ? 'block' : 'none' }"
-        >
-          <a @click="handleChangePassword">修改密码</a>
-          <div class="divider"></div>
-          <a @click="handleLogout">退出登录</a>
-        </div>
-      </div>
-    </div>
 
     <!-- Main Content -->
     <main class="page-main">
@@ -194,13 +156,7 @@
       </div>
     </main>
 
-    <!-- Bottom Bar -->
-    <div class="bottom-bar">
-      <p class="copyright-text">
-        版权所有© Copyright 2025 浙江大学 软件工程基础课程 教学服务系统课程设计
-        信息管理子系统
-      </p>
-    </div>
+
   </div>
 </template>
 
@@ -212,8 +168,8 @@ import {
   getMyCourseSections,
   getSectionGrades,
   submitStudentGrades,
-} from "@/api/teacher";
-import { useuserLoginStore } from "@/store/userLoginStore";
+} from "../../../api/info_manage/teacher";
+import { useuserLoginStore } from "../../../store/userLoginStore";
 import { useRouter } from "vue-router";
 import { isNullOrUndef } from "chart.js/helpers";
 

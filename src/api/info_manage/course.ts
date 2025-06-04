@@ -1,8 +1,8 @@
-import apiClient from "@/request";
+import apiClient from "./request";
 
 // 获取课程列表
 export const getCourses = async (params: any) => {
-  return await apiClient.request({
+  return await apiClient.request({  
     url: "/courses",
     method: "GET",
     params: params,

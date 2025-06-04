@@ -1,35 +1,5 @@
 <template>
   <div>
-    <!-- Top Bar -->
-    <div class="top-bar">
-      <div class="left-section">
-        <span class="system-name">教学服务系统</span>
-        <span class="system-subname">信息管理子系统 - 学生主页</span>
-      </div>
-      <div class="right-section">
-        <div class="user-info" @click="toggleUserDropdown">
-          <div class="user-avatar">
-            <font-awesome-icon :icon="['fas', 'user-graduate']" />
-          </div>
-          <span class="user-name">{{ loginUserStore.loginUser.name }}</span>
-          <font-awesome-icon
-            :icon="
-              userDropdownOpen
-                ? ['fas', 'fa-angle-up']
-                : ['fas', 'fa-angle-down']
-            "
-          />
-        </div>
-        <div
-          class="user-dropdown-menu"
-          :style="{ display: userDropdownOpen ? 'block' : 'none' }"
-        >
-          <a @click="logChange">修改密码</a>
-          <div class="divider"></div>
-          <a @click="logout">退出登录</a>
-        </div>
-      </div>
-    </div>
 
     <!-- Main Content -->
     <main class="page-main">
@@ -137,14 +107,6 @@
         </div>
       </div>
     </main>
-
-    <!-- Bottom Bar -->
-    <div class="bottom-bar">
-      <p class="copyright-text">
-        版权所有© Copyright 2025 浙江大学 软件工程基础课程 教学服务系统课程设计
-        信息管理子系统
-      </p>
-    </div>
   </div>
 </template>
 
@@ -152,7 +114,7 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { useuserLoginStore } from "@/store/userLoginStore";
+import { useuserLoginStore } from "../../../store/userLoginStore";
 import { useRouter } from "vue-router";
 // 响应式数据
 // 状态管理

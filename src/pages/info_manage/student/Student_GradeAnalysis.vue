@@ -1,41 +1,5 @@
 <template>
   <div>
-    <!-- Top Bar -->
-    <div class="top-bar">
-      <div class="left-section">
-        <router-link
-          to="../student/dashboard"
-          class="back-icon"
-          id="backToDashboard"
-        >
-          <FontAwesomeIcon icon="fas fa-arrow-left" />
-        </router-link>
-        <span class="system-name">教学服务系统</span>
-        <span class="system-subname">信息管理子系统 - 成绩分析</span>
-      </div>
-      <div class="right-section">
-        <div class="user-info" id="userInfoToggle" @click="toggleUserDropdown">
-          <div class="user-avatar">
-            <FontAwesomeIcon icon="fas fa-user-graduate" />
-          </div>
-          <span class="user-name" id="approveGradeAdminName">{{
-            loginUserStore.loginUser.name
-          }}</span>
-          <FontAwesomeIcon
-            :icon="isUserDropdownOpen ? 'fas fa-angle-up' : 'fas fa-angle-down'"
-          />
-        </div>
-        <div
-          class="user-dropdown-menu"
-          id="userDropdown"
-          :style="{ display: isUserDropdownOpen ? 'block' : 'none' }"
-        >
-          <a @click="handleChangePassword">修改密码</a>
-          <div class="divider"></div>
-          <a @click="handleLogout">退出登录</a>
-        </div>
-      </div>
-    </div>
 
     <!-- Main Content -->
     <main class="page-main">
@@ -180,21 +144,15 @@
       {{ notificationMessage }}
     </div>
 
-    <!-- Bottom Bar -->
-    <div class="bottom-bar">
-      <p class="copyright-text">
-        版权所有© Copyright 2025 浙江大学 软件工程基础课程 教学服务系统课程设计
-        信息管理子系统
-      </p>
-    </div>
+
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { useuserLoginStore } from "@/store/userLoginStore";
-import { getStudentGrades, getStudentGradeAnalysis } from "@/api/student";
+import { useuserLoginStore } from "../../../store/userLoginStore";
+import { getStudentGrades, getStudentGradeAnalysis } from "../../../api/info_manage/student";
 import { Chart } from "chart.js/auto";
 import { useRouter } from "vue-router";
 
@@ -728,113 +686,6 @@ const calculateAndDisplayAnalytics = (data: any) => {
     });
   }
 };
-//   data: [
-//     {
-//       sec_year: 2023,
-//       semester: "秋冬",
-//       course_id: "C001",
-//       score: 85,
-//       gpa: 3.5,
-//       credits: 3,
-//       type: "compulsory",
-//     },
-//     {
-//       sec_year: 2023,
-//       semester: "秋冬",
-//       course_id: "C002",
-//       score: 92,
-//       gpa: 4.0,
-//       credits: 4,
-//       type: "elective",
-//     },
-//     {
-//       sec_year: 2024,
-//       semester: "春夏",
-//       course_id: "C003",
-//       score: 78,
-//       gpa: 3.2,
-//       credits: 3,
-//       type: "compulsory",
-//     },
-//   ],
-// };
-//
-// const mockStudentGradeAnalysisResponse = {
-//   data: {
-//     code: 200,
-//     message: "分析成功",
-//     data: {
-//       overall_gpa: 3.3,
-//       average_score: 78.25,
-//       total_credits_earned: 10,
-//       total_credits_taken: 12,
-//       grade_distribution_by_course: [
-//         {
-//           course_name: "高等数学",
-//           score: 85,
-//           gpa: 3.5,
-//           credit: 3,
-//           course_type: "compulsory",
-//         },
-//         {
-//           course_name: "大学英语",
-//           score: 92,
-//           gpa: 4.0,
-//           credit: 4,
-//           course_type: "elective",
-//         },
-//         {
-//           course_name: "计算机科学基础",
-//           score: 78,
-//           gpa: 3.2,
-//           credit: 3,
-//           course_type: "compulsory",
-//         },
-//         {
-//           course_name: "艺术鉴赏",
-//           score: 58,
-//           gpa: 1.8,
-//           credit: 2,
-//           course_type: "elective",
-//         },
-//         {
-//           course_name: "艺术鉴赏",
-//           score: 58,
-//           gpa: 1.8,
-//           credit: 2,
-//           course_type: "elective",
-//         },
-//         {
-//           course_name: "艺术鉴赏",
-//           score: 58,
-//           gpa: 1.8,
-//           credit: 2,
-//           course_type: "elective",
-//         },
-//       ],
-//       performance_trend: [
-//         {
-//           semester: "2023-秋冬",
-//           gpa: 3.75,
-//         },
-//         {
-//           semester: "2024-春夏",
-//           gpa: 3.0,
-//         },
-//       ],
-//     },
-//   },
-// };
-//
-// // 临时替换 getStudentGrades 函数
-// const getStudentGrades = async (params: any) => {
-//   return mockStudentGradesResponse;
-// };
-//
-// // 临时替换 getStudentGradeAnalysis 函数
-// const getStudentGradeAnalysis = async (params: any) => {
-//   return mockStudentGradeAnalysisResponse;
-// };
 
 onMounted(() => {
   fetchGradesData();
