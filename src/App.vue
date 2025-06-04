@@ -10,15 +10,16 @@ import { useuserLoginStore } from './store/userLoginStore';
 const userLoginStore = useuserLoginStore();
 
 // TODO: get user info from other modules
-const user = ref('admin');
-const user_name = ref('用户名');
-const user_avatar = ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png');
+const user = ref('invalid');
+const user_name = ref('未登录');
+const user_avatar = ref('invalid');
 const is_homepage = ref(true);
 const is_sidebar_visible = ref(false);
-const activeModule = ref('courseSelection');
+const activeModule = ref('infoManagement');
 
 // Watch for changes in loginUser from the store
 watchEffect(() => {
+  is_homepage.value = true;
   const currentUser = userLoginStore.loginUser;
   if (currentUser && currentUser.user_id !== 'null') {
     user_name.value = currentUser.name;

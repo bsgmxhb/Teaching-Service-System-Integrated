@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getCurrentUserProfile } from "@/api/account";
+import { getCurrentUserProfile } from "../api/info_manage/account";
 import { Ref, ref } from "vue";
 import { AxiosResponse } from "axios";
 

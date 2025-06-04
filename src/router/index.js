@@ -52,6 +52,7 @@ import CourseGradeAnalysis from '../pages/info_manage/teacher/Teacher_CourseGrad
 import Home from '../pages/Home.vue'
 import Login from '../pages/Login.vue'
 import ChangePassword from '../pages/ChangePassword.vue'
+import { useuserLoginStore } from '../store/userLoginStore'; // Import the store
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -110,5 +111,28 @@ const router = createRouter({
         {path: '/info_manage/courseGradeAnalysis', component: CourseGradeAnalysis},
     ]
 })
+
+// Global navigation guard
+router.beforeEach((to, from, next) => {
+  const userLoginStore = useuserLoginStore();
+  const isLoggedIn = userLoginStore.loginUser && userLoginStore.loginUser.token !== 'null' && userLoginStore.loginUser.user_id !== 'null';
+
+  // Define routes that do not require authentication
+  const publicPages = ['/login'];
+  const authRequired = !publicPages.includes(to.path);
+
+  if (authRequired && !isLoggedIn) {
+    // If trying to access a restricted page and not logged in,
+    // redirect to the login page.
+    return next('/login');
+  }
+
+  if (isLoggedIn && to.path === '/login') {
+    // If logged in and trying to access login page, redirect to home
+    return next('/home');
+  }
+
+  next(); // Proceed as normal
+});
 
 export default router
