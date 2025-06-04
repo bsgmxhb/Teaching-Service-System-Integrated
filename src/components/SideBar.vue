@@ -13,7 +13,7 @@
         <el-icon><Setting /></el-icon>
         <span>信息管理</span>
       </el-menu-item>
-      <el-menu-item index="courseArrangement">
+      <el-menu-item index="courseArrangement" v-if="user !== 'student'">
         <el-icon><Calendar /></el-icon>
         <span>课程安排</span>
       </el-menu-item>
@@ -21,7 +21,7 @@
         <el-icon><School /></el-icon>
         <span>课程选择</span>
       </el-menu-item>
-      <el-menu-item index="onlineQuiz">
+      <el-menu-item index="onlineQuiz" v-if="user !== 'admin'">
         <el-icon><EditPen /></el-icon>
         <span>在线测验</span>
       </el-menu-item>
@@ -36,12 +36,13 @@
 <script setup>
 import { inject } from 'vue';
 import { Setting, Calendar, School, EditPen, Share } from '@element-plus/icons-vue';
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'; 
 
 const isSidebarVisible = inject('is_sidebar_visible');
 const activeModule = inject('activeModule');
 const is_homepage = inject('is_homepage');
 const router = useRouter();
+const user = inject('user');
 
 const handleSelect = (index) => {
   activeModule.set(index);

@@ -94,6 +94,34 @@ const pageTitle = computed(() => {
         return '课程补选'
       case '/course_selection/manageSupplementary':
         return '课程补选管理'
+      case '/course_schedule/classroomBrowseAdmin':
+        return '浏览教室信息（管理员端）'
+      case '/course_schedule/classroomBrowseTeacher':
+        return '浏览教室信息（教师端）'
+      case '/course_schedule/classroomAddition':
+        return '添加教室'
+      case '/course_schedule/classroomModify':
+        return '修改教室信息'
+      case '/course_schedule/classroomDeletion':
+        return '删除教室'
+      case '/course_schedule/courseArrangement':
+        return '手动调整课程'
+      case '/course_schedule/courseAutoArrange':
+        return '自动排课'
+      case '/course_schedule/courseArrangementQueryClassroom':
+        return '教室课表查询'
+      case '/course_schedule/courseArrangementQueryTeacher':
+        return '教师课表查询'
+      case '/online_test/setQuestionBank':
+        return '题库管理'
+      case '/online_test/manageTest':
+        return '考试管理'
+      case '/online_test/searchAnalysis':
+        return '成绩查询分析'
+      case '/online_test/searchResult':
+        return '成绩查询'
+      case '/online_test/searchTest':
+        return '考试查询'
     }
   }
 })

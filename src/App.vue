@@ -6,7 +6,7 @@ import BottomBar from './components/BottomBar.vue'
 import SideBar from './components/SideBar.vue'
 
 // TODO: get user info from other modules
-const user = ref('student');
+const user = ref('teacher');
 const user_name = ref('用户名');
 const user_avatar = ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png');
 const is_homepage = ref(true);

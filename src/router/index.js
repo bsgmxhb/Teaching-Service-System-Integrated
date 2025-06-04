@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+// 课程选择
 import ChooseCurriculum from '../pages/course_selection/student/ChooseCurriculum.vue'
 import ShowCurriculum from '../pages/course_selection/student/ShowCurriculum.vue'
 import SearchCourse from '../pages/course_selection/student/SearchCourse.vue'
@@ -10,7 +11,23 @@ import Manage from '../pages/course_selection/admin/Manage.vue'
 import ManualChoose from '../pages/course_selection/admin/ManualChoose.vue'
 import SetCurriculum from '../pages/course_selection/admin/SetCurriculum.vue'
 import ManageSupp from '../pages/course_selection/admin/ManageSupp.vue'
-// TODO: import pages from other modules
+// 课程安排
+import ClassroomBrowseAdmin from '../pages/course_schedule/admin/ClassroomBrowseAdmin.vue'
+import ClassroomAddition from '../pages/course_schedule/admin/ClassroomAddition.vue'
+import ClassroomDeletion from '../pages/course_schedule/admin/ClassroomDeletion.vue'
+import ClassroomModify from '../pages/course_schedule/admin/ClassroomModify.vue'
+import CourseArrangement from '../pages/course_schedule/admin/CourseArrangement.vue'
+import CourseAutoArrange from '../pages/course_schedule/admin/CourseAutoArrange.vue'
+import ClassroomBrowseTeacher from '../pages/course_schedule/teacher/ClassroomBrowseTeacher.vue'
+import CourseArrangementQueryClassroom from '../pages/course_schedule/teacher/CourseArrangementQueryClassroom.vue'
+import CourseArrangementQueryTeacher from '../pages/course_schedule/teacher/CourseArrangementQueryTeacher.vue'
+// 在线测验
+import SetQuestionBank from '../pages/online_test/teacher/SetQuestionBank.vue'
+import ManageTest from '../pages/online_test/teacher/ManageTest.vue'
+import SearchAnalysis from '../pages/online_test/teacher/SearchAnalysis.vue'
+import SearchResult from '../pages/online_test/student/SearchResult.vue'
+import SearchTest from '../pages/online_test/student/SearchTest.vue'
+
 import Home from '../pages/Home.vue'
 import Login from '../pages/Login.vue'
 
@@ -32,6 +49,21 @@ const router = createRouter({
         { path: '/course_selection/setCurriculum', component: SetCurriculum },
         { path: '/course_selection/manageSupplementary', component: ManageSupp },
         // TODO: add other modules
+        { path: '/course_schedule/classroomBrowseAdmin', component: ClassroomBrowseAdmin },
+        { path: '/course_schedule/classroomAddition', component: ClassroomAddition },
+        { path: '/course_schedule/classroomDeletion', component: ClassroomDeletion },
+        { path: '/course_schedule/classroomModify', component: ClassroomModify },
+        { path: '/course_schedule/courseArrangement', component: CourseArrangement },
+        { path: '/course_schedule/courseAutoArrange', component: CourseAutoArrange },
+        { path: '/course_schedule/classroomBrowseTeacher', component: ClassroomBrowseTeacher },
+        { path: '/course_schedule/courseArrangementQueryClassroom', component: CourseArrangementQueryClassroom },
+        { path: '/course_schedule/courseArrangementQueryTeacher', component: CourseArrangementQueryTeacher },
+
+        {  path: '/online_test/setQuestionBank', component: SetQuestionBank },
+        {  path: '/online_test/manageTest', component: ManageTest },
+        {  path: '/online_test/searchAnalysis', component: SearchAnalysis },
+        { path: '/online_test/searchResult', component: SearchResult},
+        { path: '/online_test/searchTest', component: SearchTest}
     ]
 })
 
