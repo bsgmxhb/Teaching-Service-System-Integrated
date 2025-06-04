@@ -36,9 +36,22 @@ import Homework from '../pages/resource_share/student/Homework.vue'
 import ViewResource from '../pages/resource_share/student/ViewResource.vue'
 import HomeworkTeacher from '../pages/resource_share/teacher/HomeworkTeacher.vue'
 import Attendance from '../pages/resource_share/teacher/Attendance.vue'
+// 信息管理
+import Profile from '../pages/info_manage/profile.vue'
+import QueryGrades from '../pages/info_manage/student/Student_QueryGrades.vue'
+import QueryGradeAnalysis from '../pages/info_manage/student/Student_GradeAnalysis.vue'
+import UserManagement from '../pages/info_manage/admin/Admin_UserManagement.vue'
+import CourseManagement from '../pages/info_manage/admin/Admin_CourseManagement.vue'
+import ApproveGradeChange from '../pages/info_manage/admin/Admin_ApproveGradeChange.vue'
+import SubmitGrades from '../pages/info_manage/teacher/Teacher_SubmitGrades.vue'
+import TaughtCourses from '../pages/info_manage/teacher/Teacher_TaughtCourses.vue'
+import EditCourse from '../pages/info_manage/teacher/Teacher_EditCourse.vue'
+import RequestGradeChange from '../pages/info_manage/teacher/Teacher_RequestGradeChange.vue'
+import CourseGradeAnalysis from '../pages/info_manage/teacher/Teacher_CourseGradeAnalysis.vue'
 
 import Home from '../pages/Home.vue'
 import Login from '../pages/Login.vue'
+import ChangePassword from '../pages/ChangePassword.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,6 +59,7 @@ const router = createRouter({
         { path: '/', redirect: '/login' },
         { path: '/home', component: Home },
         { path: '/login', component: Login },
+        { path: '/changePassword', component: ChangePassword },
         { path: '/course_selection/chooseCurriculum', component: ChooseCurriculum },
         { path: '/course_selection/showCurriculum', component: ShowCurriculum },
         { path: '/course_selection/searchCourse', component: SearchCourse },
@@ -82,6 +96,18 @@ const router = createRouter({
         { path: '/resource_sharing/viewResource', component: ViewResource },
         { path: '/resource_sharing/homeworkTeacher', component: HomeworkTeacher },
         { path: '/resource_sharing/attendance', component: Attendance },
+
+        {path: '/info_manage/profile', component: Profile},
+        {path: '/info_manage/queryGrades', component: QueryGrades},
+        {path: '/info_manage/queryGradeAnalysis', component: QueryGradeAnalysis},
+        {path: '/info_manage/userManagement', component: UserManagement},
+        {path: '/info_manage/courseManagement', component: CourseManagement},
+        {path: '/info_manage/approveGradeChange', component: ApproveGradeChange},
+        {path: '/info_manage/submitGrades', component: SubmitGrades},
+        {path: '/info_manage/taughtCourses', component: TaughtCourses},
+        {path: '/info_manage/editCourse', component: EditCourse},
+        {path: '/info_manage/requestGradeChange', component: RequestGradeChange},
+        {path: '/info_manage/courseGradeAnalysis', component: CourseGradeAnalysis},
     ]
 })
 
