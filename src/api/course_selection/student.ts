@@ -27,6 +27,7 @@ api.interceptors.response.use(
     }
 );
 
+// Interfaces (假设这些根据你提供的文件是正确和完整的)
 interface courseList {
     course_name: String;
     credit: Number;
@@ -62,27 +63,27 @@ interface studentCurriculumQueryResponse {
     }
 }
 
-interface courseQuery {
+export interface courseQuery {
     course_name?: String;
     teacher_name?: String;
     course_id?: Number;
-    student_id?: Number; // 可选，如果为空是在searchCourse中调用，表示返回所有课程，否则在chooseCourse中调用，表示只能查看自己专业的课程
+    student_id?: Number;
     need_available?: Boolean;
 }
 
-interface detailedCourseInfo {
-    course_id: Number;
+export interface detailedCourseInfo {
+    course_id: Number; // 对于已选/可选课程，这将是 section_id
     course_name: String;
-    course_description: String;
+    course_description?: String; // 根据某些上下文是可选的
     teacher_name: String;
     class_time: String;
     classroom: String;
-    available_capacity: Number;
-    total_capacity: Number;
+    available_capacity?: Number; // 在已选课程API示例中不存在，可选
+    total_capacity?: Number;   // 在已选课程API示例中不存在，可选
     credit: Number;
 }
 
-interface courseQueryResponse {
+export interface courseQueryResponse { // searchCourse 和 getStudentSelectedCourses 使用
     code: String;
     message: String;
     data: {
@@ -90,7 +91,7 @@ interface courseQueryResponse {
     }
 }
 
-interface postResponse {
+export interface postResponse { // 用于提交、退课等操作
     code: String;
     message: String;
 }
@@ -100,12 +101,23 @@ interface supplementaryCourseQuery {
     course_id: Number;
 }
 
+interface suppResult {
+    course_id: Number;
+    result: String;
+}
+
 interface getSuppResultResponse {
     code: String;
     message: String;
     data: {
-        result: String;
+        result_list: Array<suppResult>;
     }
+}
+
+// 用于提交选课和退课的Payload (结构相同)
+export interface StudentCourseActionPayload {
+    student_id: Number;
+    course_id: Number; // 这是 section_id
 }
 
 
@@ -121,11 +133,7 @@ const handleError = (error: unknown) => {
 
 export const getMajorCurriculum = async (major_name: String): Promise<majorCurriculumQueryResponse> => {
     try {
-        const response = await api.get(`/api/get_curriculum`, {
-            params: {
-                major_name: major_name
-            }
-        });
+        const response = await api.get(`/course_selection/get_curriculum`, { params: { major_name } });
         return response.data;
     } catch (error) {
         handleError(error);
@@ -136,7 +144,7 @@ export const getMajorCurriculum = async (major_name: String): Promise<majorCurri
 
 export const setPersonalCurriculum = async (params: personalCurriculumInfo): Promise<postResponse> => {
     try {
-        const response = await api.post(`/api/student/set_personal_curriculum`, params);
+        const response = await api.post(`/course_selection/student/set_personal_curriculum`, params);
         return response.data;
     } catch (error) {
         handleError(error);
@@ -146,11 +154,7 @@ export const setPersonalCurriculum = async (params: personalCurriculumInfo): Pro
 
 export const getPersonalCurriculum = async (student_id: Number): Promise<studentCurriculumQueryResponse> => {
     try {
-        const response = await api.get(`/api/student/get_personal_curriculum`, {
-            params: {
-                student_id: student_id
-            }
-        });
+        const response = await api.get(`/course_selection/student/get_personal_curriculum`, { params: { student_id } });
         return response.data;
     } catch (error) {
         handleError(error);
@@ -160,9 +164,18 @@ export const getPersonalCurriculum = async (student_id: Number): Promise<student
 
 export const searchCourse = async (params: courseQuery): Promise<courseQueryResponse> => {
     try {
-        const response = await api.get(`/api/search_course`, {
-            params: params
-        });
+        const response = await api.get(`/course_selection/search_course`, { params });
+        return response.data;
+    } catch (error) {
+        handleError(error);
+        throw error;
+    }
+}
+
+// 学生选课函数 (你之前可能命名不同)
+export const submitStudentCourseSelection = async (payload: StudentCourseActionPayload): Promise<postResponse> => {
+    try {
+        const response = await api.post(`/course_selection/student/choose_course`, payload);
         return response.data;
     } catch (error) {
         handleError(error);
@@ -172,7 +185,7 @@ export const searchCourse = async (params: courseQuery): Promise<courseQueryResp
 
 export const chooseCourseSupp = async (params: supplementaryCourseQuery): Promise<postResponse> => {
     try {
-        const response = await api.post(`/api/student/apply_supplement`, params);
+        const response = await api.post(`/course_selection/student/apply_supplement`, params);
         return response.data;
     } catch (error) {
         handleError(error);
@@ -180,23 +193,57 @@ export const chooseCourseSupp = async (params: supplementaryCourseQuery): Promis
     }
 }
 
-export const getSuppResult = async (params: supplementaryCourseQuery): Promise<getSuppResultResponse> => {
+export const getSuppResult = async (student_id: Number): Promise<getSuppResultResponse> => {
     try {
-        const response = await api.get(`/api/student/get_supp_result`, {
-            params: params
-        });
+        const response = await api.get(`/course_selection/student/get_supp_result`, { params: { student_id } });
         return response.data;
     } catch (error) {
         handleError(error);
         throw error;
     }
 }
+
+// --- 为 ShowResult.vue 新增的函数 ---
+
+/**
+ * 学生查看已选课程
+ * GET /student/show_selected_courses (带前缀: /course_selection/student/show_selected_courses)
+ */
+export const getStudentSelectedCourses = async (student_id: Number): Promise<courseQueryResponse> => {
+    try {
+        const response = await api.get(`/course_selection/student/show_selected_courses`, {
+            params: { student_id }
+        });
+        return response.data; // 假设响应结构与 courseQueryResponse 匹配
+    } catch (error) {
+        handleError(error);
+        throw error;
+    }
+};
+
+/**
+ * 学生退课
+ * POST /student/drop_course (带前缀: /course_selection/student/drop_course)
+ */
+export const dropStudentCourse = async (payload: StudentCourseActionPayload): Promise<postResponse> => {
+    try {
+        const response = await api.post(`/course_selection/student/drop_course`, payload);
+        return response.data;
+    } catch (error) {
+        handleError(error);
+        throw error;
+    }
+};
+
 
 export const studentAPI = {
     getMajorCurriculum,
     setPersonalCurriculum,
     getPersonalCurriculum,
     searchCourse,
+    submitStudentCourseSelection, // 假设这是 POST /student/choose_course 的函数
     chooseCourseSupp,
-    getSuppResult
-}
+    getSuppResult,
+    getStudentSelectedCourses, // <-- 新增
+    dropStudentCourse          // <-- 新增
+};

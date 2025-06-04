@@ -1,6 +1,6 @@
 <template>
   <div class="bottom-bar">
-    <p class="copyright-text">版权所有©  Copyright  2025  浙江大学  软件工程基础课程  教学服务系统课程设计  课程选择子系统</p>
+    <p class="copyright-text">版权所有©  Copyright  2025  浙江大学  软件工程基础课程  教学服务系统课程设计</p>
   </div>
 </template>
 

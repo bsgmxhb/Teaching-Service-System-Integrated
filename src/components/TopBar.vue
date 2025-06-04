@@ -4,7 +4,6 @@
     <div class="left-section">
       <el-icon size="30px" v-if="!is_homepage.get()" @click="goToHome()" class="back-icon"><Back /></el-icon>
       <span class="system-name">{{ pageTitle }}</span>
-      <span class="system-subname" v-if="is_homepage.get()">课程选择子系统</span>
     </div>
 
     <!-- 右侧用户信息 -->
@@ -69,27 +68,27 @@ const pageTitle = computed(() => {
   } else {
     // 返回对应页面的标题
     switch (router.currentRoute.value.path) {
-      case '/chooseCurriculum':
+      case '/course_selection/chooseCurriculum':
         return '定制培养方案'
-      case '/showCurriculum':
+      case '/course_selection/showCurriculum':
         return '查看培养方案'
-      case '/searchCourse':
+      case '/course_selection/searchCourse':
         return '搜索课程信息'
-      case '/chooseCourse':
+      case '/course_selection/chooseCourse':
         return '课程初选'
-      case '/showResult':
+      case '/course_selection/showResult':
         return '查看选课结果'
-      case '/showResultTeacher':
+      case '/course_selection/showResultTeacher':
         return '查看选课结果（教师端）'
-      case '/manage':
+      case '/course_selection/manage':
         return '课程选择管理'
-      case '/manualChoose':
+      case '/course_selection/manualChoose':
         return '手动选择课程'
-      case '/setCurriculum':
+      case '/course_selection/setCurriculum':
         return '制订培养方案'
-      case '/chooseCourseSupplementary':
+      case '/course_selection/chooseCourseSupplementary':
         return '课程补选'
-      case '/manageSupplementary':
+      case '/course_selection/manageSupplementary':
         return '课程补选管理'
     }
   }
