@@ -21,7 +21,7 @@
 
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item command="profile">个人中心</el-dropdown-item>
+            <el-dropdown-item command="changePassword">修改密码</el-dropdown-item>
             <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -56,8 +56,8 @@ const handleCommand = async (command) => {
     } catch (error) {
       console.log('取消退出')
     }
-  } else if (command === 'profile') {
-    // TODO: 个人中心
+  } else if (command === 'changePassword') {
+    router.push('/changePassword')
   }
 }
 

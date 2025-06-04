@@ -437,6 +437,7 @@ function goToAttendance() {
   is_homepage.set(false);
   router.push('/resource_sharing/attendance');
 }
+// TODO: 信息管理模块跳转
 </script>
 
 <style scoped>

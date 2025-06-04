@@ -33,6 +33,25 @@ import Homework from '../pages/resource_share/student/Homework.vue'
 import ViewResource from '../pages/resource_share/student/ViewResource.vue'
 import HomeworkTeacher from '../pages/resource_share/teacher/HomeworkTeacher.vue'
 import Attendance from '../pages/resource_share/teacher/Attendance.vue'
+// 信息管理
+import AdminDashboard from "../pages/info_manage/admin/Admin_Dashboard.vue";
+import AdminCourseManagement from "../pages/info_manage/admin/Admin_CourseManagement.vue";
+import AdminUserManagement from "../pages/info_manage/admin/Admin_UserManagement.vue";
+import AdminProfile from "../pages/info_manage/admin/Admin-Profile.vue";
+import ChangePassword from "../pages/ChangePassword.vue";
+import QueryCourse from "../pages/info_manage/Query_Course.vue";
+import StudentDashboard from "../pages/info_manage/student/Student_Dashboard.vue";
+import StudentGradeAnalysis from "../pages/info_manage/student/Student_GradeAnalysis.vue";
+import StudentProfile from "../pages/info_manage/student/Student_Profile.vue";
+import StudentQueryGrades from "../pages/info_manage/student/Student_QueryGrades.vue";
+import StudentSelectedCourses from "../pages/info_manage/student/Student_SelectCourses.vue";
+import TeacherSubmitGrades from "../pages/info_manage/teacher/Teacher_SubmitGrades.vue";
+import TeacherCourseGradeAnalysis from "../pages/info_manage/teacher/Teacher_CourseGradeAnalysis.vue";
+import TeacherDashboard from "../pages/info_manage/teacher/Teacher_Dashboard.vue";
+import TeacherEditCourse from "../pages/info_manage/teacher/Teacher_EditCourse.vue";
+import TeacherProfile from "../pages/info_manage/teacher/Teacher_Profile.vue";
+import TeacherRequestGradeChange from "../pages/info_manage/teacher/Teacher_RequestGradeChange.vue";
+import TeacherTaughtCourses from "../pages/info_manage/teacher/Teacher_TaughtCourses.vue";
 
 import Home from '../pages/Home.vue'
 import Login from '../pages/Login.vue'
@@ -76,6 +95,25 @@ const router = createRouter({
         { path: '/resource_sharing/viewResource', component: ViewResource },
         { path: '/resource_sharing/homeworkTeacher', component: HomeworkTeacher },
         { path: '/resource_sharing/attendance', component: Attendance },
+
+        { path: '/info_manage/admin/Admin_Dashboard', component: AdminDashboard },
+        { path: '/info_manage/admin/Admin_CourseManagement', component: AdminCourseManagement },
+        { path: '/info_manage/admin/Admin_UserManagement', component: AdminUserManagement },
+        { path: '/info_manage/admin/Admin_Profile', component: AdminProfile },
+        { path: '/ChangePassword', component: ChangePassword },
+        { path: '/info_manage/Query_Course', component: QueryCourse },
+        { path: '/info_manage/student/Student_Dashboard', component: StudentDashboard },
+        { path: '/info_manage/student/Student_GradeAnalysis', component: StudentGradeAnalysis },
+        { path: '/info_manage/student/Student_Profile', component: StudentProfile },
+        { path: '/info_manage/student/Student_QueryGrades', component: StudentQueryGrades },
+        { path: '/info_manage/student/Student_SelectCourses', component: StudentSelectedCourses },
+        { path: '/info_manage/teacher/Teacher_SubmitGrades', component: TeacherSubmitGrades },
+        { path: '/info_manage/teacher/Teacher_CourseGradeAnalysis', component: TeacherCourseGradeAnalysis },
+        { path: '/info_manage/teacher/Teacher_Dashboard', component: TeacherDashboard },
+        { path: '/info_manage/teacher/Teacher_EditCourse', component: TeacherEditCourse },
+        { path: '/info_manage/teacher/Teacher_Profile', component: TeacherProfile },
+        { path: '/info_manage/teacher/Teacher_RequestGradeChange', component: TeacherRequestGradeChange },
+        { path: '/info_manage/teacher/Teacher_TaughtCourses', component: TeacherTaughtCourses },
     ]
 })
 
