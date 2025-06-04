@@ -133,13 +133,6 @@
       </div>
     </main>
 
-    <!-- Bottom Bar -->
-    <div class="bottom-bar">
-      <p class="copyright-text">
-        版权所有© Copyright 2025 浙江大学 软件工程基础课程 教学服务系统课程设计
-        信息管理子系统
-      </p>
-    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -148,10 +141,10 @@ import {
   getCurrentUserProfile,
   updateCurrentUserProfile,
   uploadAvatar,
-} from "../../../api/info_manage/account";
-import { useuserLoginStore } from "../../../store/userLoginStore";
+} from "../../api/info_manage/account";
+import { useuserLoginStore } from "../../store/userLoginStore";
 import { useRouter } from "vue-router";
-import defaultAvatar from "../../../assets/defaultAvatar.png";
+import defaultAvatar from "../../assets/defaultAvatar.png";
 
 const router = useRouter();
 const loginUserStore = useuserLoginStore();
@@ -192,7 +185,7 @@ const fetchUserProfile = async () => {
   try {
     const response = await getCurrentUserProfile();
     studentProfileData.value = response.data.data;
-    studentProfileData.value.role = "管理员";
+    studentProfileData.value.role = "学生";
   } catch (error) {
     showNotification("获取用户信息失败，请稍后重试。", "error");
   }

@@ -135,13 +135,7 @@
         if (loginSuccess) {
           showNotification("登录成功！正在跳转...", "success");
           setTimeout(() => {
-            if (role === "t") {
-              router.push("/info_manage/teacher/Teacher_Dashboard");
-            } else if (role === "s") {
-              router.push("/info_manage/student/Student_Dashboard");
-            } else if (role === "a") {
-              router.push("/info_manage/admin/Admin_Dashboard");
-            }
+            router.push('/home');
           }, 1000);
         } else {
           showNotification("登录失败：无法获取用户信息。", "error");

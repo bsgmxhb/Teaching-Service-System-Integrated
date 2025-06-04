@@ -2,7 +2,96 @@
   <div>
     <!-- 信息管理模块 -->
     <div v-if="activeModule.get() === 'infoManagement'">
-      <div class="module-content-placeholder">信息管理模块正在建设中...</div>
+      <div style="display: flex;flex-wrap: wrap; justify-content: start;">
+        <el-button class="cardBox" @click="goToProfile()">
+          <div>
+            <div style="font-size: 28px;font-weight: bold;">个人信息</div>
+            <el-divider />
+            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+          </div>
+        </el-button>
+
+        <el-button class="cardBox" @click="goToQueryGrades()" v-if="user == 'student'">
+          <div>
+            <div style="font-size: 28px;font-weight: bold;">成绩查询</div>
+            <el-divider />
+            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+          </div>
+        </el-button>
+
+        <el-button class="cardBox" @click="goToQueryGradeAnalysis()" v-if="user == 'student'">
+          <div>
+            <div style="font-size: 28px;font-weight: bold;">学情分析</div>
+            <el-divider />
+            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+          </div>
+        </el-button>
+
+        <el-button class="cardBox" @click="goToUserManagement()" v-if="user == 'admin'">
+          <div>
+            <div style="font-size: 28px;font-weight: bold;">用户管理</div>
+            <el-divider />
+            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+          </div>
+        </el-button>
+        
+        <el-button class="cardBox" @click="goToCourseManagement()" v-if="user == 'admin'">
+          <div>
+            <div style="font-size: 28px;font-weight: bold;">课程管理</div>
+            <el-divider />
+            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+          </div>
+        </el-button>
+
+        <el-button class="cardBox" @click="goToApproveGradeChange()" v-if="user == 'admin'">
+          <div>
+            <div style="font-size: 28px;font-weight: bold;">审核成绩修改</div>
+            <el-divider />
+            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+          </div>
+        </el-button>
+
+        <el-button class="cardBox" @click="goToSubmitGrades()" v-if="user == 'teacher'">
+          <div>
+            <div style="font-size: 28px;font-weight: bold;">提交成绩</div>
+            <el-divider />
+            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+          </div>
+        </el-button>
+
+        <el-button class="cardBox" @click="goToTaughtCourses()" v-if="user == 'teacher'">
+          <div>
+            <div style="font-size: 28px;font-weight: bold;">我的课程</div>
+            <el-divider />
+            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+          </div>
+        </el-button>
+
+        <el-button class="cardBox" @click="goToEditCourse()" v-if="user == 'teacher'">
+          <div>
+            <div style="font-size: 28px;font-weight: bold;">修改课程信息</div>
+            <el-divider />
+            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+          </div>
+        </el-button>
+
+        <el-button class="cardBox" @click="goToRequestGradeChange()" v-if="user == 'teacher'">
+          <div>
+            <div style="font-size: 28px;font-weight: bold;">修改已提交成绩</div>
+            <el-divider />
+            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+          </div>
+        </el-button>
+
+        <el-button class="cardBox" @click="goToCourseGradeAnalysis()" v-if="user == 'teacher'">
+          <div>
+            <div style="font-size: 28px;font-weight: bold;">课程成绩分析</div>
+            <el-divider />
+            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+          </div>
+        </el-button>
+        
+      </div>
     </div>
 
     <!-- 课程安排模块 -->
@@ -438,6 +527,50 @@ function goToAttendance() {
   router.push('/resource_sharing/attendance');
 }
 // TODO: 信息管理模块跳转
+function goToProfile() {
+  is_homepage.set(false);
+  router.push('/info_manage/profile');
+}
+function goToQueryGrades() {
+  is_homepage.set(false);
+  router.push('/info_manage/queryGrades');
+}
+function goToQueryGradeAnalysis() {
+  is_homepage.set(false);
+  router.push('/info_manage/queryGradeAnalysis');
+}
+function goToUserManagement() {
+  is_homepage.set(false);
+  router.push('/info_manage/userManagement');
+}
+function goToCourseManagement() {
+  is_homepage.set(false);
+  router.push('/info_manage/courseManagement');
+}
+function goToApproveGradeChange() {
+  is_homepage.set(false);
+  router.push('/info_manage/approveGradeChange');
+}
+function goToSubmitGrades() {
+  is_homepage.set(false);
+  router.push('/info_manage/submitGrades');
+}
+function goToTaughtCourses() {
+  is_homepage.set(false);
+  router.push('/info_manage/taughtCourses');
+}
+function goToEditCourse() {
+  is_homepage.set(false);
+  router.push('/info_manage/editCourse');
+}
+function goToRequestGradeChange() {
+  is_homepage.set(false);
+  router.push('/info_manage/requestGradeChange');
+}
+function goToCourseGradeAnalysis() {
+  is_homepage.set(false);
+  router.push('/info_manage/courseGradeAnalysis');
+}
 </script>
 
 <style scoped>

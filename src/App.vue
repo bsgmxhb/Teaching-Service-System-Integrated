@@ -1,37 +1,17 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import { ref, provide, onMounted, watchEffect } from 'vue';
+import { ref, provide, onMounted } from 'vue';
 import TopBar from './components/TopBar.vue'
 import BottomBar from './components/BottomBar.vue'
 import SideBar from './components/SideBar.vue'
-import { useuserLoginStore } from './store/userLoginStore';
 
-// Initialize with a state indicating user is not yet known or logged out
-const user = ref(''); // e.g., 's', 't', 'a', or empty if not logged in
-const user_name = ref('未登录'); // Default to "Not logged in"
-const user_avatar = ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'); // Default avatar
+// TODO: get user info from other modules
+const user = ref('student');
+const user_name = ref('用户名');
+const user_avatar = ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png');
 const is_homepage = ref(true);
 const is_sidebar_visible = ref(false);
 const activeModule = ref('courseSelection');
-
-const loginStore = useuserLoginStore();
-
-// Watch for changes in login store and update App.vue's state
-watchEffect(() => {
-  // Assuming loginStore.loginUser holds the user data and isLogin indicates login status
-  // You might need to adjust property names based on your store's actual structure
-  if (loginStore.isLogin && loginStore.loginUser) {
-    user.value = loginStore.loginUser.role || '';
-    user_name.value = loginStore.loginUser.name || loginStore.loginUser.account || '用户'; // Fallback
-    user_avatar.value = loginStore.loginUser.avatar || 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png';
-  } else {
-    user.value = '';
-    user_name.value = '未登录';
-    user_avatar.value = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png';
-    // Potentially reset other states like is_homepage or activeModule if user logs out
-    // For now, just resetting user info
-  }
-});
 
 // 从localStorage读取保存的状态
 onMounted(() => {

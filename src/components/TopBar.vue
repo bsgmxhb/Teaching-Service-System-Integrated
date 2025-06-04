@@ -132,7 +132,28 @@ const pageTitle = computed(() => {
         return '作业（教师端）'
       case '/resource_sharing/attendance':
         return '考勤（教师端）'
-        
+      case '/info_manage/profile':
+        return '个人信息'
+      case '/info_manage/queryGrades':
+        return '成绩查询'
+      case '/info_manage/queryGradeAnalysis':
+        return '学情分析'
+      case '/info_manage/userManagement':
+        return '用户管理'
+      case '/info_manage/courseManagement':
+        return '课程管理'
+      case '/info_manage/approveGradeChange':
+        return '审核成绩修改'
+      case '/info_manage/submitGrades':
+        return '提交成绩'
+      case '/info_manage/taughtCourses':
+        return '我的课程'
+      case '/info_manage/editCourse':
+        return '修改课程信息'
+      case '/info_manage/requestGradeChange':
+        return '修改已提交成绩'
+      case '/info_manage/courseGradeAnalysis':
+        return '课程成绩分析'
     }
   }
 })
