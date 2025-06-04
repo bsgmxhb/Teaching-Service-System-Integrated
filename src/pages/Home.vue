@@ -7,7 +7,7 @@
           <div>
             <div style="font-size: 28px;font-weight: bold;">个人信息</div>
             <el-divider />
-            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+            <el-icon size="150px" color="#409EFF"><Compass/></el-icon>
           </div>
         </el-button>
 
@@ -15,7 +15,7 @@
           <div>
             <div style="font-size: 28px;font-weight: bold;">成绩查询</div>
             <el-divider />
-            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+            <el-icon size="150px" color="#67C23A"><Histogram /></el-icon>
           </div>
         </el-button>
 
@@ -23,7 +23,7 @@
           <div>
             <div style="font-size: 28px;font-weight: bold;">学情分析</div>
             <el-divider />
-            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+            <el-icon size="150px" color="info"><Promotion /></el-icon>
           </div>
         </el-button>
 
@@ -31,7 +31,7 @@
           <div>
             <div style="font-size: 28px;font-weight: bold;">用户管理</div>
             <el-divider />
-            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+            <el-icon size="150px" color="#F56C6C"><User /></el-icon>
           </div>
         </el-button>
         
@@ -39,7 +39,7 @@
           <div>
             <div style="font-size: 28px;font-weight: bold;">课程管理</div>
             <el-divider />
-            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+            <el-icon size="150px" color="#67C23A"><Operation /></el-icon>
           </div>
         </el-button>
 
@@ -47,7 +47,7 @@
           <div>
             <div style="font-size: 28px;font-weight: bold;">审核成绩修改</div>
             <el-divider />
-            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+            <el-icon size="150px" color="#909399"><Check /></el-icon>
           </div>
         </el-button>
 
@@ -55,7 +55,7 @@
           <div>
             <div style="font-size: 28px;font-weight: bold;">提交成绩</div>
             <el-divider />
-            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+            <el-icon size="150px" color="#67C23A"><CollectionTag /></el-icon>
           </div>
         </el-button>
 
@@ -63,7 +63,7 @@
           <div>
             <div style="font-size: 28px;font-weight: bold;">我的课程</div>
             <el-divider />
-            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+            <el-icon size="150px" color="#409EFF"><Files /></el-icon>
           </div>
         </el-button>
 
@@ -71,7 +71,7 @@
           <div>
             <div style="font-size: 28px;font-weight: bold;">修改课程信息</div>
             <el-divider />
-            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+            <el-icon size="150px" color="#E6A23C"><DCaret /></el-icon>
           </div>
         </el-button>
 
@@ -79,7 +79,7 @@
           <div>
             <div style="font-size: 28px;font-weight: bold;">修改已提交成绩</div>
             <el-divider />
-            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+            <el-icon size="150px" color="#F56C6C"><CircleCheck /></el-icon>
           </div>
         </el-button>
 
@@ -87,7 +87,7 @@
           <div>
             <div style="font-size: 28px;font-weight: bold;">课程成绩分析</div>
             <el-divider />
-            <el-icon size="150px" color="#67C23A"><Calendar /></el-icon>
+            <el-icon size="150px" color="#909399"><AddLocation /></el-icon>
           </div>
         </el-button>
         
@@ -358,21 +358,21 @@
         <div>
           <div style="font-size: 28px;font-weight: bold;">课程资源上传</div>
           <el-divider />
-          <el-icon size="150px" color="pink"><Collection /></el-icon>
+          <el-icon size="150px" color="#909399"><Upload /></el-icon>
         </div>
       </el-button>
       <el-button class="cardBox" @click="goToviewResource()" v-if="user == 'student'">
         <div>
           <div style="font-size: 28px;font-weight: bold;">课程资源查看</div>
           <el-divider />
-          <el-icon size="150px" color="pink"><Collection /></el-icon>
+          <el-icon size="150px" color="#409EFF"><Monitor /></el-icon>
         </div>
       </el-button>
       <el-button class="cardBox" @click="goToHomework()" v-if="user == 'student'">
         <div>
           <div style="font-size: 28px;font-weight: bold;">作业</div>
           <el-divider />
-          <el-icon size="150px" color="pink"><Collection /></el-icon>
+          <el-icon size="150px" color="#67C23A"><DataAnalysis /></el-icon>
         </div>
       </el-button>
 
@@ -380,7 +380,7 @@
         <div>
           <div style="font-size: 28px;font-weight: bold;">作业（教师端）</div>
           <el-divider />
-          <el-icon size="150px" color="pink"><Collection /></el-icon>
+          <el-icon size="150px" color="#67C23A"><SetUp /></el-icon>
         </div>
       </el-button>
 
@@ -388,7 +388,7 @@
         <div>
           <div style="font-size: 28px;font-weight: bold;">考勤（教师端）</div>
           <el-divider />
-          <el-icon size="150px" color="pink"><Collection /></el-icon>
+          <el-icon size="150px" color="info"><TrendCharts /></el-icon>
         </div>
       </el-button>
       </div>
@@ -398,6 +398,8 @@
 </template>
 
 <script setup>
+import { AddLocation, CircleCheck, CollectionTag, TrendCharts } from '@element-plus/icons-vue';
+import { statisticProps } from 'element-plus';
 import { inject } from 'vue'; // Removed ref as activeModule is now injected
 import { useRouter } from 'vue-router';
 

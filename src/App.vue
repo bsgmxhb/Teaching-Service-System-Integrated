@@ -1,17 +1,50 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import { ref, provide, onMounted } from 'vue';
+import { ref, provide, onMounted, watchEffect } from 'vue';
 import TopBar from './components/TopBar.vue'
 import BottomBar from './components/BottomBar.vue'
 import SideBar from './components/SideBar.vue'
+import { useuserLoginStore } from './store/userLoginStore';
+
+// Initialize the store
+const userLoginStore = useuserLoginStore();
 
 // TODO: get user info from other modules
-const user = ref('student');
+const user = ref('admin');
 const user_name = ref('用户名');
 const user_avatar = ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png');
 const is_homepage = ref(true);
 const is_sidebar_visible = ref(false);
 const activeModule = ref('courseSelection');
+
+// Watch for changes in loginUser from the store
+watchEffect(() => {
+  const currentUser = userLoginStore.loginUser;
+  if (currentUser && currentUser.user_id !== 'null') {
+    user_name.value = currentUser.name;
+    user_avatar.value = currentUser.avatar_path && currentUser.avatar_path !== 'null' ? currentUser.avatar_path : 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png';
+
+    // Map role
+    switch (currentUser.role) {
+      case 's':
+        user.value = 'student';
+        break;
+      case 't':
+        user.value = 'teacher';
+        break;
+      case 'a':
+        user.value = 'admin';
+        break;
+      default:
+        user.value = 'guest'; // Or some default/fallback role for unknown roles
+    }
+  } else {
+    // Reset to default if user logs out or info is not available
+    user_name.value = '用户名';
+    user_avatar.value = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png';
+    user.value = 'admin'; // Default role, can be 'guest' or based on application logic
+  }
+});
 
 // 从localStorage读取保存的状态
 onMounted(() => {
