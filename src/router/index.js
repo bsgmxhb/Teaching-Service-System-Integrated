@@ -27,6 +27,12 @@ import ManageTest from '../pages/online_test/teacher/ManageTest.vue'
 import SearchAnalysis from '../pages/online_test/teacher/SearchAnalysis.vue'
 import SearchResult from '../pages/online_test/student/SearchResult.vue'
 import SearchTest from '../pages/online_test/student/SearchTest.vue'
+// 资源共享
+import UploadResource from '../pages/resource_share/student/UploadResource.vue'
+import Homework from '../pages/resource_share/student/Homework.vue'
+import ViewResource from '../pages/resource_share/student/ViewResource.vue'
+import HomeworkTeacher from '../pages/resource_share/teacher/HomeworkTeacher.vue'
+import Attendance from '../pages/resource_share/teacher/Attendance.vue'
 
 import Home from '../pages/Home.vue'
 import Login from '../pages/Login.vue'
@@ -63,7 +69,13 @@ const router = createRouter({
         {  path: '/online_test/manageTest', component: ManageTest },
         {  path: '/online_test/searchAnalysis', component: SearchAnalysis },
         { path: '/online_test/searchResult', component: SearchResult},
-        { path: '/online_test/searchTest', component: SearchTest}
+        { path: '/online_test/searchTest', component: SearchTest},
+
+        { path: '/resource_sharing/uploadResource', component: UploadResource },
+        { path: '/resource_sharing/homework', component: Homework },
+        { path: '/resource_sharing/viewResource', component: ViewResource },
+        { path: '/resource_sharing/homeworkTeacher', component: HomeworkTeacher },
+        { path: '/resource_sharing/attendance', component: Attendance },
     ]
 })
 

@@ -122,6 +122,17 @@ const pageTitle = computed(() => {
         return '成绩查询'
       case '/online_test/searchTest':
         return '考试查询'
+      case '/resource_sharing/uploadResource':
+        return '课程资源上传'
+      case '/resource_sharing/viewResource':
+        return '课程资源查看'
+      case '/resource_sharing/homework':
+        return '作业'
+      case '/resource_sharing/homeworkTeacher':
+        return '作业（教师端）'
+      case '/resource_sharing/attendance':
+        return '考勤（教师端）'
+        
     }
   }
 })

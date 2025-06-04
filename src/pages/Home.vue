@@ -262,7 +262,47 @@
 
     <!-- 课程资源共享模块 -->
     <div v-if="activeModule.get() === 'resourceSharing'">
-      <div class="module-content-placeholder">课程资源共享模块正在建设中...</div>
+            <div style="display: flex;flex-wrap: wrap; justify-content: start;">
+
+          
+      <el-button class="cardBox" @click="goToUploadResource()" v-if="user == 'student'">
+        <div>
+          <div style="font-size: 28px;font-weight: bold;">课程资源上传</div>
+          <el-divider />
+          <el-icon size="150px" color="pink"><Collection /></el-icon>
+        </div>
+      </el-button>
+      <el-button class="cardBox" @click="goToviewResource()" v-if="user == 'student'">
+        <div>
+          <div style="font-size: 28px;font-weight: bold;">课程资源查看</div>
+          <el-divider />
+          <el-icon size="150px" color="pink"><Collection /></el-icon>
+        </div>
+      </el-button>
+      <el-button class="cardBox" @click="goToHomework()" v-if="user == 'student'">
+        <div>
+          <div style="font-size: 28px;font-weight: bold;">作业</div>
+          <el-divider />
+          <el-icon size="150px" color="pink"><Collection /></el-icon>
+        </div>
+      </el-button>
+
+      <el-button class="cardBox" @click="goToHomeworkTeacher()" v-if="user == 'teacher'">
+        <div>
+          <div style="font-size: 28px;font-weight: bold;">作业（教师端）</div>
+          <el-divider />
+          <el-icon size="150px" color="pink"><Collection /></el-icon>
+        </div>
+      </el-button>
+
+      <el-button class="cardBox" @click="goToAttendance()" v-if="user == 'teacher'">
+        <div>
+          <div style="font-size: 28px;font-weight: bold;">考勤（教师端）</div>
+          <el-divider />
+          <el-icon size="150px" color="pink"><Collection /></el-icon>
+        </div>
+      </el-button>
+      </div>
     </div>
 
   </div>
@@ -376,6 +416,26 @@ function goToSearchResult() {
 function goToSearchTest() {
   is_homepage.set(false);
   router.push('/online_test/searchTest');
+}
+function goToUploadResource() {
+  is_homepage.set(false);
+  router.push('/resource_sharing/uploadResource');
+}
+function goToviewResource() {
+  is_homepage.set(false);
+  router.push('/resource_sharing/viewResource');
+}
+function goToHomework() {
+  is_homepage.set(false);
+  router.push('/resource_sharing/homework');
+}
+function goToHomeworkTeacher() {
+  is_homepage.set(false);
+  router.push('/resource_sharing/homeworkTeacher');
+}
+function goToAttendance() {
+  is_homepage.set(false);
+  router.push('/resource_sharing/attendance');
 }
 </script>
 

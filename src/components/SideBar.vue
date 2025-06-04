@@ -25,7 +25,7 @@
         <el-icon><EditPen /></el-icon>
         <span>在线测验</span>
       </el-menu-item>
-      <el-menu-item index="resourceSharing">
+      <el-menu-item index="resourceSharing" v-if="user !== 'admin'">
         <el-icon><Share /></el-icon>
         <span>课程资源共享</span>
       </el-menu-item>
