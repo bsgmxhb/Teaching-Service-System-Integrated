@@ -1,6 +1,13 @@
 # Teaching-Service-System
 Project for 2025 Software Engineering Basis
 
+**注：由于index.js中设置了不能手动修改URL，如果需要在没有后端的情况下运行，请修改以下两处：**
+
+1. 将`src/router/index.js`中115-136行注释
+2. 将`src/App.vue`中13、49行的`'invalid'`改为`'student'`, `'admin'`或`'teacher'`
+
+**之后在浏览器中手动修改URL为`localhost:3000/home`，即可跳过登录页面进入主页面。**
+
 # Structure
 
 ```bash
@@ -40,5 +47,3 @@ npm run dev
 # Element Plus Website
 
 https://element-plus.org/zh-CN/component/overview.html
-
-**注：如果要区分管理员、教师、学生，在./src/App.vue中修改user的值为admin、teacher、student**
