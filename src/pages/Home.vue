@@ -11,7 +11,7 @@
       <div v-if="favoriteCardDetails.length === 0" class="module-content-placeholder">
         还没有任何收藏的功能，请点击卡片收藏
       </div>
-      <div v-else style="display: flex;flex-wrap: wrap; justify-content: start;">
+      <div v-else style="display: flex;flex-wrap: wrap; justify-content: start; padding-left: 50px;">
         <el-button
           v-for="card in favoriteCardDetails"
           :key="card.id"
@@ -34,7 +34,7 @@
     <!-- 通用模块渲染 -->
     <div v-for="moduleInfo in modules" :key="moduleInfo.name">
       <div v-if="activeModule.get() === moduleInfo.name && moduleInfo.name !== 'favorite'">
-        <div style="display: flex; flex-wrap: wrap; justify-content: start;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: start; padding-left: 50px;">
           <el-button
             v-for="card in getModuleCards(moduleInfo.name)"
             :key="card.id"
@@ -369,7 +369,7 @@ function goToCourseGradeAnalysis() {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     text-align: center;
     margin-top: 40px;
-    margin-left: 70px;
+    margin-left: 11px;
     margin-right: 30px;
     margin-bottom: 20px;
     padding: 7.5px;
@@ -388,7 +388,7 @@ function goToCourseGradeAnalysis() {
   position: absolute;
   top: 12px; /* Adjusted for better placement */
   right: 12px; /* Adjusted for better placement */
-  font-size: 24px; /* Made icon larger */
+  font-size: 27px; /* Made icon larger */
   cursor: pointer;
   z-index: 10;
   color: #FFD700; /* Gold color for star */
@@ -416,7 +416,7 @@ function goToCourseGradeAnalysis() {
   background-color: #e6f7ff; 
   border-top: 1px solid #abe0ff; 
   border-bottom: 1px solid #abe0ff; 
-  margin: 95px 0 10px 0; 
+  margin: 0px 0 10px 0; 
   border-radius: 4px;
   box-sizing: border-box;
 }
