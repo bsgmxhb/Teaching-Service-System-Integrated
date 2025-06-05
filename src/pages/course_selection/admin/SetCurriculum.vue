@@ -258,7 +258,7 @@
   
       if (curriculumResponse.code === '200' && coursesResponse.code === '200') {
         // 更新培养方案数据
-        formData.sections = curriculumResponse.data.sections;
+        formData.sections = curriculumResponse.data.sections || [];
         //console.log('培养方案sections数据:', formData.sections);
         // 更新所有课程数据
         allCourses.value = coursesResponse.data.course_list;
