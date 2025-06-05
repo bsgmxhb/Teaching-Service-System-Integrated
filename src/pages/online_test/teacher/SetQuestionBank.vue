@@ -71,6 +71,16 @@
       </el-select>
     </el-form-item>
 
+    <el-form-item label="题目难度">
+      <el-select v-model="currentEditQuestion.difficulty" placeholder="请选择难度">
+        <el-option label="1" value="1" />
+        <el-option label="2" value="2" />
+        <el-option label="3" value="3" />
+        <el-option label="4" value="4" />
+        <el-option label="5" value="5" />
+      </el-select>
+    </el-form-item>
+
     <!-- 添加选项输入框，仅当题目类型为选择题时显示 -->
     <el-form-item label="选项" v-if="currentEditQuestion.question_type === 'MC'">
       <el-input
@@ -106,6 +116,17 @@
             <el-option label="判断题" value="TF" />
           </el-select>
         </el-form-item>
+
+        <el-form-item label="题目难度">
+          <el-select v-model="currentEditQuestion.difficulty" placeholder="请选择难度">
+            <el-option label="1" value="1" />
+            <el-option label="2" value="2" />
+            <el-option label="3" value="3" />
+            <el-option label="4" value="4" />
+            <el-option label="5" value="5" />
+          </el-select>
+        </el-form-item>
+
         <el-form-item label="选项" v-if="newQuestion.question_type === 'MC'">
           <el-input
             v-model="newQuestion.options"
@@ -223,6 +244,7 @@ async function applyFilters() {
       question_id: item.question_id,
       content: item.content,
       question_type: item.question_type,
+      difficulty: item.difficulty,
       score: item.score,
       answer: item.answer
     }))
@@ -255,28 +277,28 @@ function openEditDialog(row) {
 // 保存编辑
 async function saveEdit() {
   try {
-    const oldQuestionId = currentEditQuestion.value.question_id;
     let optionsArray = null;
     if (currentEditQuestion.value.question_type === 'MC') {
       const lines = currentEditQuestion.value.options.split('\n');
       optionsArray = lines.map(line => line.trim()).filter(line => line !== '');
     }
 
+    // 构建更新数据
     const payload = {
+      questionId: currentEditQuestion.value.question_id, // 添加要更新的题目ID
       courseId: selectedCourse.value,
       chapterId: selectedChapter.value,
       questionType: currentEditQuestion.value.question_type,
       content: currentEditQuestion.value.content,
       answer: currentEditQuestion.value.answer,
       score: currentEditQuestion.value.score,
-      options: optionsArray // 添加选项字段
+      difficulty: currentEditQuestion.value.difficulty,
+      options: optionsArray // 选择题的选项数组
     };
 
-    await api.post('/test/questions/addQuestion', payload);
-    await api.delete('/test/questions/delQuestion', {
-      params: { question_id: oldQuestionId }
-    });
-
+    // 使用PUT请求直接更新题目
+    await api.put('/test/questions/updateQuestion', payload);
+    
     editDialogVisible.value = false;
     applyFilters();
     ElMessage.success('编辑成功')
@@ -314,6 +336,7 @@ async function saveNewQuestion() {
       content: newQuestion.value.content,
       answer: newQuestion.value.answer,
       score: newQuestion.value.score,
+      difficulty: newQuestion.value.difficulty,
       options: optionsArray // 添加选项字段
     };
 
