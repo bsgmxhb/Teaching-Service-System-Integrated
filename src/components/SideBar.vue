@@ -5,6 +5,7 @@
     title="选择模块"
     direction="ltr"
     :with-header="true"
+    v-if="user !== 'invalid'"
     size="250px"
     header-class="custom-drawer-header"
   >

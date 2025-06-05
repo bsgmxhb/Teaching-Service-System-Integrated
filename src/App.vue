@@ -12,17 +12,20 @@ const userLoginStore = useuserLoginStore();
 // TODO: get user info from other modules
 const user = ref('invalid');
 const user_name = ref('未登录');
-const user_avatar = ref('invalid');
+const user_avatar = ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png');
+const user_id = ref('null');
+
 const is_homepage = ref(true);
 const is_sidebar_visible = ref(false);
 const activeModule = ref('infoManagement');
 
 // Watch for changes in loginUser from the store
 watchEffect(() => {
-  is_homepage.value = true;
   const currentUser = userLoginStore.loginUser;
   if (currentUser && currentUser.user_id !== 'null') {
+    is_homepage.value = true;
     user_name.value = currentUser.name;
+    user_id.value = currentUser.user_id;
     user_avatar.value = currentUser.avatar_path && currentUser.avatar_path !== 'null' ? currentUser.avatar_path : 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png';
 
     // Map role
@@ -41,9 +44,10 @@ watchEffect(() => {
     }
   } else {
     // Reset to default if user logs out or info is not available
-    user_name.value = '用户名';
+    user_name.value = '未登录';
     user_avatar.value = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png';
-    user.value = 'admin'; // Default role, can be 'guest' or based on application logic
+    user.value = 'invalid'; 
+    user_id.value = 'null';
   }
 });
 

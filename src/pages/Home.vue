@@ -1,5 +1,11 @@
 <template>
   <div>
+    <!-- 欢迎用户 -->
+     <div class="welcome-banner">
+       <el-icon class="welcome-icon"><Bell /></el-icon>
+       <span class="welcome-text">欢迎登录教学服务系统，{{ user_name }}！今天是{{ currentDate }}</span>
+     </div>
+    
     <!-- 信息管理模块 -->
     <div v-if="activeModule.get() === 'infoManagement'">
       <div style="display: flex;flex-wrap: wrap; justify-content: start;">
@@ -398,15 +404,25 @@
 </template>
 
 <script setup>
-import { AddLocation, CircleCheck, CollectionTag, TrendCharts } from '@element-plus/icons-vue';
+import { AddLocation, Bell, CircleCheck, CollectionTag, TrendCharts } from '@element-plus/icons-vue';
 import { statisticProps } from 'element-plus';
-import { inject } from 'vue'; // Removed ref as activeModule is now injected
+import { inject, onMounted, ref } from 'vue'; // Removed ref as activeModule is now injected
 import { useRouter } from 'vue-router';
 
 const activeModule = inject('activeModule'); // Injected activeModule
 const user = inject('user');
 const router = useRouter();
 const is_homepage = inject('is_homepage');
+const user_name = inject('user_name');
+const currentDate = ref('');
+
+onMounted(() => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  currentDate.value = `${year}年${month}月${day}日`;
+});
 
 function goToChooseCurriculum() {
   is_homepage.set(false);
@@ -577,13 +593,13 @@ function goToCourseGradeAnalysis() {
 
 <style scoped>
 .cardBox {
-    height: 300px;
-    width: 200px;
+    height: 315px;
+    width: 210px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     text-align: center;
     margin-top: 40px;
-    margin-left: 50px;
-    margin-right: 25px;
+    margin-left: 70px;
+    margin-right: 30px;
     margin-bottom: 20px;
     padding: 7.5px;
     padding-right: 10px;
@@ -606,5 +622,30 @@ function goToCourseGradeAnalysis() {
   font-size: 20px;
   color: #909399;
   margin: 20px; /* Added margin for consistency */
+}
+
+.welcome-banner {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  background-color: #e6f7ff; /* Light blue background */
+  border-top: 1px solid #abe0ff; /* Thin line above */
+  border-bottom: 1px solid #abe0ff; /* Thin line below */
+  margin: 95px 0 10px 0; 
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.welcome-icon {
+  margin-left: 15px;
+  margin-right: 30px;
+  font-size: 22px;
+  color: #409EFF; 
+}
+
+.welcome-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #303133;
 }
 </style>
