@@ -66,6 +66,18 @@
               value-format="YYYY-MM-DDTHH:mm:ss"
           />
         </div>
+        
+        <div class="form-item">
+          <label>成绩比例</label>
+          <el-input-number
+              v-model="examInfo.ratio"
+              :min="1"
+              :max="100"
+              placeholder="请输入比例"
+          >
+            <template #append>%</template>
+          </el-input-number>
+        </div>
       </div>
 
       <!-- 是否开卷和操作按钮 -->
@@ -198,7 +210,8 @@ const examInfo = reactive({
   startTime: '',
   isOpenBook: false,
   notifyStudents: true,
-  isRandom: 0
+  isRandom: 0,
+  ratio: 100 // 默认为100%
 })
 
 const courses = ref([])
@@ -347,31 +360,34 @@ async function createAndPublishExam() {
   try {
     // 转换数据格式以匹配后端要求
     const requestData = {
-      testName: examInfo.testName, // 注意字段名转换
-      teacherId: teacherId.value, // 从组件数据中获取
+      testName: examInfo.testName,
+      teacherId: teacherId.value,
       courseId: examInfo.courseId,
       publishTime: formatLocalTime(startDate),
-      deadline: formatLocalTime(deadline), // 根据duration计算截止时间
+      deadline: formatLocalTime(deadline),
       questionCount: selectedQuestions.value.length,
-      isRandom: examInfo.isRandom, // 假设0表示非随机
-      questionIds: selectedQuestions.value.map(q => q.question_id) // 直接发送数组
+      isRandom: examInfo.isRandom,
+      questionIds: selectedQuestions.value.map(q => q.question_id),
+      ratio: examInfo.ratio,
+      // 添加一个参数表示直接发布，不需要再调用publish
+      isPublished: true
     }
 
     console.log("发送给后端的数据:", requestData)
-    console.log("实际发送的teacher_id:", teacherId.value, "类型:", typeof teacherId.value)
-    console.log("完整请求数据:", JSON.stringify(requestData, null, 2))
-    console.log("请求headers:", api.defaults.headers)
-
+    
+    // 合并为一个API调用，只使用generate接口
     const createRes = await api.post('/test/testPublish/generate', requestData)
     const testId = createRes.data
-    console.log("testId 类型:", typeof testId)
-    console.log("testId 内容:", testId)
-    const params = new URLSearchParams()
-    params.append('testId', testId)
-    params.append('publishTime', formatLocalTime(startDate))
-    await api.post('/test/testPublish/publish', params, {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    })
+    console.log("考试创建成功，testId:", testId)
+    
+    // 移除第二个publish API调用
+    // ================删除下面这段代码================
+    // const params = new URLSearchParams()
+    // params.append('testId', testId)
+    // params.append('publishTime', formatLocalTime(startDate))
+    // await api.post('/test/testPublish/publish', params, {
+    //   headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    // })
     
     ElMessage.success('考试发布成功！')
     resetForm()
@@ -424,6 +440,10 @@ function validateForm() {
     ElMessage.warning('请输入考试时长')
     return false
   }
+  if (!examInfo.ratio || examInfo.ratio < 1 || examInfo.ratio > 100) {
+    ElMessage.warning('请输入1-100之间的成绩比例')
+    return false
+  }
   return true
 }
 
@@ -436,7 +456,8 @@ function resetForm() {
     startTime: '',
     isOpenBook: false,
     notifyStudents: true,
-    isRandom: 0
+    isRandom: 0,
+    ratio: 100 // 重置为100%
   })
   selectedQuestions.value = []
   searchResults.value = []
