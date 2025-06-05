@@ -20,7 +20,15 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
 
+library.add(
+    ...Object.values(fas),
+    ...Object.values(far),
+    ...Object.values(fab)
+);
+
 app.use(pinia)
 app.use(router)
 app.use(ElementPlus)
 app.mount('#app')
+app.component("FontAwesomeIcon", FontAwesomeIcon)
+
