@@ -138,113 +138,126 @@
     timetableGrid.value = newGrid;
   };
   
-  // Parses strings like "12" into [1, 2] or "101112" into [10, 11, 12]
-  const parseSlotStringRevised = (slotStr) => {
-    const slots = [];
-    let i = 0;
-    while (i < slotStr.length) {
-      if (slotStr[i] === '1' && i + 1 < slotStr.length) {
-        const twoDigitNum = parseInt(slotStr.substring(i, i + 2));
-        if (twoDigitNum >= 10 && twoDigitNum <= 13) {
-          slots.push(twoDigitNum);
-          i += 2;
-          continue;
-        }
-      }
-      const oneDigitNum = parseInt(slotStr[i]);
-      if (oneDigitNum >= 1 && oneDigitNum <= 9) {
-        slots.push(oneDigitNum);
-        i += 1;
-        continue;
-      }
-      // Fallback for unexpected characters, though input should be clean
-      console.error(`Unexpected character or format in slot string: ${slotStr[i]} from "${slotStr}"`);
-      i++;
-    }
-    return slots.sort((a, b) => a - b); // Ensure slots are sorted for duration calculation
+  const mapEnglishDayToChinese = (englishDay) => {
+    const mapping = {
+      "Monday": "周一",
+      "Tuesday": "周二",
+      "Wednesday": "周三",
+      "Thursday": "周四",
+      "Friday": "周五",
+      "Saturday": "周六",
+      "Sunday": "周日"
+    };
+    return mapping[englishDay.charAt(0).toUpperCase() + englishDay.slice(1).toLowerCase()]; // Normalize case
   };
   
   const parseAndPlaceCourses = () => {
     initializeTimetableGrid();
     if (!selectedCourses.value || selectedCourses.value.length === 0) return;
-  
+
+    // Helper function to place a course segment onto the grid
+    // This function is defined inside parseAndPlaceCourses to have access to timetableGrid and course details easily
+    const _placeCourseSegmentOnGrid = (dayOfWeek, startSlotNum, duration, courseInfo) => {
+      const courseData = {
+        name: courseInfo.course_name,
+        classroom: courseInfo.classroom,
+        isStartSlot: true,
+        duration: duration
+      };
+      const subsequentCourseData = {
+        name: courseInfo.course_name,
+        classroom: courseInfo.classroom,
+        isStartSlot: false,
+        duration: 0
+      };
+
+      for (let i = 0; i < duration; i++) {
+        const slotNum = startSlotNum + i;
+        let periodKey, slotIndexInPeriod;
+        
+        if (slotNum >= 1 && slotNum <= 5) { 
+          periodKey = '上午'; slotIndexInPeriod = slotNum - 1;
+        } else if (slotNum >= 6 && slotNum <= 10) {
+          periodKey = '下午'; slotIndexInPeriod = slotNum - 6;
+        } else if (slotNum >= 11 && slotNum <= 13) {
+          periodKey = '晚上'; slotIndexInPeriod = slotNum - 11;
+        } else {
+          console.error(`Invalid slot number: ${slotNum} for course ${courseInfo.course_name} on ${dayOfWeek}`);
+          continue; 
+        }
+
+        if (timetableGrid.value[dayOfWeek] && timetableGrid.value[dayOfWeek][periodKey]) {
+          if (i === 0) {
+            timetableGrid.value[dayOfWeek][periodKey][slotIndexInPeriod] = courseData;
+          } else {
+            timetableGrid.value[dayOfWeek][periodKey][slotIndexInPeriod] = subsequentCourseData;
+          }
+        } else {
+          console.error(`Timetable grid slot not found for ${dayOfWeek}, ${periodKey}, slotIndex ${slotIndexInPeriod}`);
+        }
+      }
+    };
+
     selectedCourses.value.forEach(course => {
-      if (!course.class_time) return; // Skip if class_time is missing
-  
-      const timeEntries = course.class_time.split(/[,;，；]/); // Split by comma or semicolon, Chinese or English
-  
-      timeEntries.forEach(entry => {
-        entry = entry.trim();
-        // Regex to capture day (周X) and slot numbers (e.g., 345, 1011)
-        const classTimeRegex = /(周[一二三四五六日])(\d+)节/g;
-        let parsedTime;
-        // Use while loop for global regex to find all matches in an entry if structure allows
-        while((parsedTime = classTimeRegex.exec(entry)) !== null) {
-          const dayOfWeek = parsedTime[1]; // "周一"
-          const slotsStr = parsedTime[2];  // "345" or "101112"
-          
-          const individualSlots = parseSlotStringRevised(slotsStr);
-  
-          if (individualSlots.length === 0) continue;
-  
-          // Check for continuity of slots for rowspan purposes
-          let currentDuration = 0;
-          let lastSlot = -1;
-          let firstSlotInSequence = -1;
-  
-          const placeCourseSegment = (startSlotNum, duration) => {
-            const courseData = {
-              name: course.course_name,
-              classroom: course.classroom,
-              isStartSlot: true,
-              duration: duration
-            };
-            const subsequentCourseData = {
-              name: course.course_name,
-              classroom: course.classroom,
-              isStartSlot: false,
-              duration: 0
-            };
-  
-            for (let i = 0; i < duration; i++) {
-              const slotNum = startSlotNum + i;
-              let periodKey, slotIndexInPeriod;
-              if (slotNum >= 1 && slotNum <= 5) { 
-                periodKey = '上午'; slotIndexInPeriod = slotNum - 1;
-              } else if (slotNum >= 6 && slotNum <= 10) {
-                periodKey = '下午'; slotIndexInPeriod = slotNum - 6;
-              } else if (slotNum >= 11 && slotNum <= 13) {
-                periodKey = '晚上'; slotIndexInPeriod = slotNum - 11;
-              } else {
-                continue; // Should not happen with parsed slots
-              }
-              if (timetableGrid.value[dayOfWeek]?.[periodKey]) {
-                   timetableGrid.value[dayOfWeek][periodKey][slotIndexInPeriod] = i === 0 ? courseData : subsequentCourseData;
-              }
+      if (!course.class_time || typeof course.class_time !== 'string' || course.class_time.trim() === '') {
+        return; 
+      }
+
+      const slotsByDay = {}; // Example: { "周三": [3, 4, 5], "周一": [1, 2] }
+
+      const timeEntries = course.class_time.split(';'); 
+
+      timeEntries.forEach(entryStr => {
+        entryStr = entryStr.trim();
+        if (!entryStr) return;
+
+        const parts = entryStr.split(/\s+/); // Split by one or more spaces, e.g. "Wednesday   3"
+        if (parts.length === 2) {
+          const dayEng = parts[0];
+          const slotStr = parts[1];
+          const slotNum = parseInt(slotStr);
+
+          const dayChinese = mapEnglishDayToChinese(dayEng);
+          if (dayChinese && !isNaN(slotNum) && slotNum >= 1 && slotNum <= 13) {
+            if (!slotsByDay[dayChinese]) {
+              slotsByDay[dayChinese] = [];
             }
-          };
-          
-          individualSlots.forEach((slotNum, index) => {
-              if (firstSlotInSequence === -1) { // Start of a new potential sequence
-                  firstSlotInSequence = slotNum;
-                  currentDuration = 1;
-              } else if (slotNum === lastSlot + 1) { // Continues the sequence
-                  currentDuration++;
-              } else { // Sequence broken, place the previous segment
-                  placeCourseSegment(firstSlotInSequence, currentDuration);
-                  // Start a new sequence
-                  firstSlotInSequence = slotNum;
-                  currentDuration = 1;
-              }
-              lastSlot = slotNum;
-  
-              // If it's the last slot in individualSlots, place the current segment
-              if (index === individualSlots.length - 1) {
-                  placeCourseSegment(firstSlotInSequence, currentDuration);
-              }
-          });
+            slotsByDay[dayChinese].push(slotNum);
+          } else {
+            console.error(`Failed to parse entry: "${entryStr}". English Day: ${dayEng} (mapped to ${dayChinese}), Slot: ${slotStr} (parsed to ${slotNum})`);
+          }
+        } else {
+          console.error(`Invalid format for time entry: "${entryStr}". Expected format "Day Slot".`);
         }
       });
+
+      for (const dayOfWeek in slotsByDay) {
+        const individualSlots = slotsByDay[dayOfWeek].sort((a, b) => a - b);
+
+        if (individualSlots.length === 0) continue;
+
+        let currentDuration = 0;
+        let lastSlot = -1;
+        let firstSlotInSequence = -1;
+
+        individualSlots.forEach((slotNum, index) => {
+          if (firstSlotInSequence === -1) { 
+            firstSlotInSequence = slotNum;
+            currentDuration = 1;
+          } else if (slotNum === lastSlot + 1) { 
+            currentDuration++;
+          } else { 
+            _placeCourseSegmentOnGrid(dayOfWeek, firstSlotInSequence, currentDuration, course);
+            firstSlotInSequence = slotNum;
+            currentDuration = 1;
+          }
+          lastSlot = slotNum;
+
+          if (index === individualSlots.length - 1) {
+            _placeCourseSegmentOnGrid(dayOfWeek, firstSlotInSequence, currentDuration, course);
+          }
+        });
+      }
     });
   };
   
