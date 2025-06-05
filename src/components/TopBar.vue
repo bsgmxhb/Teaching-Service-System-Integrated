@@ -5,9 +5,9 @@
       <el-icon size="30px" @click="isSidebarVisible.toggle()" class="sidebar-toggle-icon">
         <Operation />
       </el-icon>
-      <el-icon size="30px" v-if="!is_homepage.get()" @click="goToHome()" class="back-icon"><Back /></el-icon>
+      <el-icon size="30px" v-if="router.currentRoute.value.path !== '/home' && user !== 'invalid'" @click="goToHome()" class="back-icon"><Back /></el-icon>
       <span class="system-name">{{ pageTitle }}</span>
-      <span class="sub-system-name" v-if="is_homepage.get() && user !== 'invalid'">{{ relfect_name(activeModule.get()) }}</span>
+      <span class="sub-system-name" v-if="router.currentRoute.value.path === '/home' && user !== 'invalid'">{{ relfect_name(activeModule.get()) }}</span>
     </div>
 
     <!-- 右侧用户信息 -->
@@ -200,7 +200,7 @@ function goToHome() {
 }
 
 const pageTitle = computed(() => {
-  if (is_homepage.get()) {
+  if (router.currentRoute.value.path === '/home' || router.currentRoute.value.path === '/' || router.currentRoute.value.path === '/login') {
     return '教学服务系统'
   } else {
     // 返回对应页面的标题
