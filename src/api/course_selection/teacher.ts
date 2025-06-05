@@ -73,7 +73,7 @@ export const getTeacherCourseResults = async (teacher_id: number): Promise<GetTe
                 teacher_id,
             },
         });
-        return responseData.data;
+        return responseData;
     } catch (error) {
         throw error;
     }
