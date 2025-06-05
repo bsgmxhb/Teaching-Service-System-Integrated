@@ -1,24 +1,5 @@
 <template>
   <div class="show-curriculum container">
-    <el-card class="form-card">
-      <template #header>
-        <div class="card-header">
-          <h2>查看个人培养方案</h2>
-        </div>
-      </template>
-      
-      <el-form :model="formData" label-width="120px" class="input-form">
-        <el-form-item label="学生ID">
-          <el-input v-model.number="formData.studentId" placeholder="请输入您的ID" type="number" />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="fetchPersonalCurriculum" :loading="loading">
-            获取个人培养方案
-          </el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
-
     <el-card v-if="curriculumData" class="curriculum-card">
       <template #header>
         <div class="card-header">
@@ -43,22 +24,18 @@
       </div>
     </el-card>
 
-    <el-empty v-if="showEmpty" description="请先获取个人培养方案" />
+    <el-empty v-if="showEmpty" description="您还没有制定个人培养方案" />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, reactive } from 'vue';
+import { ref, computed, onMounted, inject } from 'vue';
 import { ElMessage } from 'element-plus';
 import { getPersonalCurriculum } from '../../../api/course_selection/student';
 
-const formData = reactive({
-  studentId: ''
-});
-
+const studentId = inject('user_id');
 const loading = ref(false);
-// 添加一些测试数据
-const curriculumData = ref();
+const curriculumData = ref(null); // Initialize with null
 const showEmpty = computed(() => !loading.value && !curriculumData.value);
 
 // 计算每个部分的总学分
@@ -72,29 +49,41 @@ const getSectionTotalCredits = (section) => {
 
 // 获取个人培养方案
 const fetchPersonalCurriculum = async () => {
-  if (!formData.studentId) {
-    ElMessage.warning('请输入学生ID');
+  if (!studentId.value) {
+    ElMessage.warning('学生ID无效，请重新登录');
+    curriculumData.value = null; // Ensure curriculumData is null if studentId is missing
+    loading.value = false; // Stop loading indicator
     return;
   }
   
   try {
     loading.value = true;
-    const response = await getPersonalCurriculum(formData.studentId);
+    const response = await getPersonalCurriculum(studentId.value);
     
     if (response.code === '200') {
-      curriculumData.value = response.data;
-      ElMessage.success('获取个人培养方案成功');
+      if (response.data && Object.keys(response.data).length > 0) {
+        curriculumData.value = response.data;
+        ElMessage.success('获取个人培养方案成功');
+      } else {
+        curriculumData.value = null; // Set to null if data is empty or not as expected
+        ElMessage.info('您可能还没有制定个人培养方案');
+      }
     } else {
       ElMessage.error(response.message || '获取失败');
       curriculumData.value = null;
     }
   } catch (error) {
     ElMessage.error('获取个人培养方案失败');
+    curriculumData.value = null; 
     console.error(error);
   } finally {
     loading.value = false;
   }
 };
+
+onMounted(() => {
+  fetchPersonalCurriculum();
+});
 </script>
 
 <style scoped>
@@ -108,22 +97,13 @@ const fetchPersonalCurriculum = async () => {
   display: flex;
   flex-direction: column;
   gap: 20px;
-}
-
-.form-card {
-  width: 95%;
-  margin: 0px auto 20px auto;
+  align-items: center; /* Center content when only empty message is shown */
 }
 
 .card-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.input-form {
-  max-width: 500px;
-  margin: 0 auto;
 }
 
 .section-container {
@@ -146,7 +126,7 @@ const fetchPersonalCurriculum = async () => {
 }
 
 .curriculum-card {
-  width: 65%;
-  margin: 0 auto;
+  width: 65%; /* Or adjust as needed */
+  margin: 20px auto; /* Add some margin */
 }
 </style>

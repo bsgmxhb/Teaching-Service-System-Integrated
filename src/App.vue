@@ -88,6 +88,7 @@ function toggleSidebar() {
 provide('user', user);
 provide('user_name', user_name);
 provide('user_avatar', user_avatar);
+provide('user_id', user_id);
 provide('is_homepage', { 
   get: () => is_homepage.value,
   set: updateIsHomepage

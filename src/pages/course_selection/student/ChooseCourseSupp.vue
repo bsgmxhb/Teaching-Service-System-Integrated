@@ -2,15 +2,12 @@
   <div class="choose-course-supp container">
     <el-card class="form-card">
       <template #header>
-        <div class="card-header">
+        <div class="card-header-center">
           <h2>课程补选申请</h2>
         </div>
       </template>
       
-      <el-form :model="formData" label-width="120px" class="input-form">
-        <el-form-item label="学生ID">
-          <el-input v-model.number="formData.student_id" placeholder="请输入学生ID" type="number" />
-        </el-form-item>
+      <el-form :model="formData" label-width="100px" class="input-form">
         <el-form-item label="开课ID">
           <el-input v-model.number="formData.section_id" placeholder="请输入开课ID" type="number" />
         </el-form-item>
@@ -24,7 +21,7 @@
 
     <el-card class="applications-card">
       <template #header>
-        <div class="card-header">
+        <div class="card-header-flex">
           <h2>补选申请记录</h2>
           <el-button type="primary" @click="refreshApplications" :loading="refreshing">
             刷新补选状态
@@ -46,7 +43,7 @@
         </el-table-column>
       </el-table>
 
-      <el-empty v-if="applications.length === 0" description="暂无补选申请记录" />
+      <el-empty v-if="applications.length === 0 && !refreshing" description="暂无补选申请记录" />
 
     </el-card>
 
@@ -54,33 +51,36 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, inject, onMounted } from 'vue';
 import { ElMessage } from 'element-plus';
-import { chooseCourseSupp, getSuppResult, searchCourse } from '../../../api/course_selection/student';
+import { chooseCourseSupp, getSuppResult } from '../../../api/course_selection/student';
+
+const studentId = inject('user_id');
 
 const formData = reactive({
-  student_id: '',
   section_id: ''
 });
 
 const submitting = ref(false);
 const refreshing = ref(false);
-// 添加一些示例数据
 const applications = ref([]);
 
 // 提交补选申请
 const submitApplication = async () => {
-  if (!formData.student_id || !formData.section_id) {
-    ElMessage.warning('请输入学生ID和开课ID');
+  if (!studentId.value) {
+    ElMessage.warning('学生ID无效，请重新登录');
+    return;
+  }
+  if (!formData.section_id) {
+    ElMessage.warning('请输入开课ID');
     return;
   }
 
-  let course_info;
   submitting.value = true;
 
   try {
     const params = {
-      student_id: formData.student_id,
+      student_id: studentId.value,
       section_id: formData.section_id
     };
     
@@ -88,10 +88,8 @@ const submitApplication = async () => {
     
     if (response.code === '200') {
       ElMessage.success('补选申请提交成功');
-
-      // 自动刷新补选申请状态
+      formData.section_id = ''; // Clear input after successful submission
       await refreshApplications();
-      
     } else {
       ElMessage.error(response.message || '提交失败');
     }
@@ -105,43 +103,45 @@ const submitApplication = async () => {
 
 // 刷新补选申请状态
 const refreshApplications = async () => {
-  if (!formData.student_id) {
-    ElMessage.warning('请输入学生ID');
+  if (!studentId.value) {
+    // No warning message here, as this can be called on mount before ID is available
+    // or if the user is not logged in.
+    // applications.value will remain empty, showing the empty state.
+    applications.value = [];
     return;
   }
 
   try {
     refreshing.value = true;
-    const response = await getSuppResult(formData.student_id);
+    const response = await getSuppResult(studentId.value);
     
     if (response.code === '200') {
-      // 先清空applications.value
-      applications.value = [];
-
-      for (let i = 0; i < response.data.result_list.length; i++) {
-        // 先添加到applications.value中
-        applications.value.push({
-          student_id: formData.student_id,
-          section_id: response.data.result_list[i].course_id,
-          course_name: response.data.result_list[i].course_name,
-          teacher_name: response.data.result_list[i].teacher_name,
-          class_time: response.data.result_list[i].class_time,
-          classroom: response.data.result_list[i].classroom,
-          credit: response.data.result_list[i].credit,
-          result: reflectResult(response.data.result_list[i].result)
-        });
+      if (response.data && response.data.result_list) {
+        applications.value = response.data.result_list.map(item => ({
+          student_id: studentId.value,
+          section_id: item.course_id,
+          course_name: item.course_name,
+          teacher_name: item.teacher_name,
+          class_time: item.class_time,
+          classroom: item.classroom,
+          credit: item.credit,
+          result: reflectResult(item.result)
+        }));
+        if (applications.value.length > 0) {
+          ElMessage.success('刷新补选状态成功');
+        } else {
+          ElMessage.info('暂无补选申请记录');
+        }
+      } else {
+        applications.value = [];
+        ElMessage.info('暂无补选申请数据');
       }
-
-      if (applications.value.length === 0) {
-        ElMessage.info('暂无申请记录可刷新');
-        return;
-      }
-
-      ElMessage.success('刷新补选状态成功');
     } else {
+      applications.value = [];
       ElMessage.error(response.message || '刷新补选状态失败');
     }
   } catch (error) {
+    applications.value = [];
     ElMessage.error('刷新补选状态失败');
     console.error(error);
   } finally {
@@ -174,6 +174,11 @@ const getStatusType = (status) => {
       return 'info';
   }
 };
+
+onMounted(() => {
+  refreshApplications();
+});
+
 </script>
 
 <style scoped>
@@ -186,6 +191,7 @@ const getStatusType = (status) => {
 .container {
   display: flex;
   flex-direction: column;
+  align-items: center; /* Center cards */
   gap: 20px;
 }
 
@@ -199,22 +205,26 @@ const getStatusType = (status) => {
   margin: 0 auto;
 }
 
-.card-header {
+.card-header-center {
+  display: flex;
+  justify-content: center; /* Center title */
+  align-items: center;
+}
+
+.card-header-flex {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.card-header h2 {
+.card-header-flex h2 {
   margin: 0;
 }
 
 .input-form {
-  max-width: 500px;
+  max-width: 400px; /* Adjusted for better centering within card */
   margin: 0 auto;
 }
 
-.empty-container {
-  margin: 40px 0;
-}
+/* .empty-container is not used in the provided template, can be removed if not needed elsewhere */
 </style>

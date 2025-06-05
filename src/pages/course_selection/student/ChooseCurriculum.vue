@@ -8,9 +8,6 @@
       </template>
       
       <el-form :model="formData" label-width="120px" class="input-form">
-        <el-form-item label="学生ID">
-          <el-input v-model.number="formData.studentId" placeholder="请输入学生ID" type="number" />
-        </el-form-item>
         <el-form-item label="专业名称">
           <el-input v-model="formData.majorName" placeholder="请输入专业名称" />
         </el-form-item>
@@ -65,9 +62,11 @@
 import { ref, computed, reactive } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { getMajorCurriculum, setPersonalCurriculum } from '../../../api/course_selection/student';
+import { inject } from 'vue';
+
+const studentId = inject('user_id');
 
 const formData = reactive({
-  studentId: '',
   majorName: ''
 });
 
@@ -143,11 +142,6 @@ const fetchMajorCurriculum = async () => {
 
 // 提交个人培养方案
 const submitCurriculum = async () => {
-  if (!formData.studentId) {
-    ElMessage.warning('请输入学生ID');
-    return;
-  }
-  
   if (!curriculumData.value) {
     ElMessage.warning('请先获取专业培养方案');
     return;
@@ -176,7 +170,7 @@ const submitCurriculum = async () => {
     });
     
     const submitData = {
-      student_id: formData.studentId,
+      student_id: studentId.value,
       major_name: curriculumData.value.major_name,
       sections: sectionsToSubmit
     };
