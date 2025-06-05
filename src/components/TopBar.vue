@@ -7,6 +7,7 @@
       </el-icon>
       <el-icon size="30px" v-if="!is_homepage.get()" @click="goToHome()" class="back-icon"><Back /></el-icon>
       <span class="system-name">{{ pageTitle }}</span>
+      <span class="sub-system-name" v-if="is_homepage.get() && user !== 'invalid'">{{ relfect_name(activeModule.get()) }}子模块</span>
     </div>
 
     <!-- 右侧用户信息 -->
@@ -181,6 +182,10 @@ const handleCommand = async (command) => {
       })
       ElMessage.success('已退出登录')
       router.push('/login')
+      user.set('invalid');
+      user_name.set('未登录');
+      user_avatar.set('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png');
+      user_id.set('null');
     } catch (error) {
       console.log('取消退出')
     }
@@ -288,6 +293,21 @@ const pageTitle = computed(() => {
     }
   }
 })
+
+const relfect_name = (module) => {
+  switch (module) {
+    case 'infoManagement':
+      return '信息管理'
+    case 'courseArrangement':
+      return '课程安排'
+    case 'courseSelection':
+      return '课程选择'
+    case 'onlineQuiz':
+      return '在线测验'
+    case 'resourceSharing':
+      return '课程资源共享'
+  }
+}
 </script>
 
 <style scoped>
@@ -445,5 +465,12 @@ const pageTitle = computed(() => {
   margin-right: 0;
   padding-left: 0;
   padding-right: 0;
+}
+
+.sub-system-name {
+  font-size: 17px;
+  font-weight: bold;
+  color: white;
+  margin-left: 20px;
 }
 </style>
