@@ -123,6 +123,10 @@ const fetchMajorCurriculum = async () => {
     const response = await getMajorCurriculum(formData.majorName);
     
     if (response.code === '200') {
+      if (response.data.sections === null) {
+        ElMessage.error('该专业还没有培养方案');
+        return;
+      }
       curriculumData.value = response.data;
       selectedCourses.value = {}; // 重置选择
       ElMessage.success('获取专业培养方案成功');
