@@ -67,6 +67,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ArrowDown, Back, Operation, Search, Close } from '@element-plus/icons-vue'
 import { inject, computed, ref, nextTick } from 'vue'
+import { useuserLoginStore } from '../store/userLoginStore'
 
 const router = useRouter()
 const is_homepage = inject('is_homepage')
@@ -75,6 +76,7 @@ const userName = inject('user_name')
 const userAvatar = inject('user_avatar')
 const user = inject('user')
 const activeModule = inject('activeModule')
+const userLoginStore = useuserLoginStore()
 
 const isSearchVisible = ref(false)
 const searchQuery = ref('')
@@ -180,12 +182,9 @@ const handleCommand = async (command) => {
         cancelButtonText: '取消',
         type: 'warning'
       })
-      ElMessage.success('已退出登录')
+      await userLoginStore.setLoginUserUnlogin()
       router.push('/login')
-      user.set('invalid');
-      user_name.set('未登录');
-      user_avatar.set('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png');
-      user_id.set('null');
+      ElMessage.success('已退出登录')
     } catch (error) {
       console.log('取消退出')
     }

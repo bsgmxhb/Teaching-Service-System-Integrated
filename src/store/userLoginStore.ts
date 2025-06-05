@@ -72,9 +72,18 @@ export const useuserLoginStore = defineStore("userLogin", {
     }
 
     async function setLoginUserUnlogin() {
-      loginUser.value = unLoginUser.value;
+      // loginUser.value = unLoginUser.value; // Old implementation
+      // Explicitly reset all fields to their initial unlogged state
+      loginUser.value.user_id = "null";
+      loginUser.value.name = "未登录";
+      loginUser.value.account = "null";
+      loginUser.value.role = "null";
+      loginUser.value.department = "null";
+      loginUser.value.contact = "null";
+      loginUser.value.avatar_path = "null";
+      loginUser.value.token = "null";
     }
 
-    return { loginUser, setLoginUser, setLoginUserUnlogin, unLoginUser };
+    return { loginUser, setLoginUser, setLoginUserUnlogin };
   },
 });
