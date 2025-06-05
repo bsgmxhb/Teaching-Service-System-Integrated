@@ -16,19 +16,7 @@
               :title="course.course_name"
               :name="index.toString()"
             >
-              <!-- 考勤比例设置 -->
-              <div class="attendance-weight">
-                <span class="weight-label">考勤成绩比例：</span>
-                <el-input-number
-                  v-model="course.attendance_weight"
-                  :min="0"
-                  :max="1"
-                  :step="0.1"
-                  :precision="2"
-                  @change="(value) => handleWeightChange(course, value)"
-                />
-              </div>
-  
+
               <!-- 日期选择器 & 提交按钮 -->
               <div class="date-selector">
                 <el-date-picker
@@ -56,11 +44,11 @@
                   :label="date.date"
                   :name="date.date"
                 >
-                  <!-- 考勤记录表格（修改为学生姓名+成绩输入） -->
+                  <!-- 考勤记录表格（学生姓名+成绩输入） -->
                   <el-table :data="date.students" style="width: 100%">
-                    <el-table-column label="学生姓名" width="150">
+                    <el-table-column label="学生ID" width="150">  <!-- 修改标签为学生ID -->
                       <template #default="{ row }">
-                        <el-input v-model="row.student_name" placeholder="输入学生姓名" />
+                        <el-input v-model="row.student_id" placeholder="输入学生ID" />  <!-- 绑定student_id -->
                       </template>
                     </el-table-column>
                     <el-table-column label="考勤成绩" width="150">
@@ -145,35 +133,41 @@
   }
   
   // 提交考勤记录
+  // 移除原比例设置方法
+  // const handleWeightChange = async (course, value) => { ... }
+  
+  // 修改提交考勤记录方法
+  // 提交考勤记录时传递student_id
   const submitAttendance = async (course) => {
     if (!course.activeDate) {
-      ElMessage.warning('请选择考勤日期')
-      return
+      ElMessage.warning('请选择考勤日期');
+      return;
     }
-    const currentDate = course.attendanceDates.find(d => d.date === course.activeDate)
+    const currentDate = course.attendanceDates.find(d => d.date === course.activeDate);
     if (currentDate.students.length === 0) {
-      ElMessage.warning('请至少添加一条考勤记录')
-      return
+      ElMessage.warning('请至少添加一条考勤记录');
+      return;
     }
     
     try {
       for (const student of currentDate.students) {
-        if (!student.student_name || !student.score) {
-          throw new Error('请完善所有学生姓名和成绩')
+        if (!student.student_id || !student.score) {  // 检查student_id是否存在
+          throw new Error('请完善所有学生ID和成绩');
         }
-        // 调用接口保存记录
-        const res = await teacherAPI.saveAttendanceRecord({
-          studentName: student.student_name,
+        // 调用接口时传递studentId（注意类型转换，假设ID是数字）
+        const res = await teacherAPI.processAttendanceRecord({
+          studentId: Number(student.student_id),  // 转换为数字类型
           courseName: course.course_name,
-          score: student.score
-        })
-        if (!res.data) throw new Error('保存失败')
+          score: student.score,
+          ratio: course.attendance_weight * 100 
+        });
+        if (!res.data) throw new Error('处理失败');
       }
-      ElMessage.success('考勤记录提交成功')
+      ElMessage.success('考勤记录处理成功');
     } catch (error) {
-      ElMessage.error(`提交失败：${error.message}`)
+      ElMessage.error(`提交失败：${error.message}`);
     }
-  }
+  };
   
   // 设置考勤比例
   const handleWeightChange = async (course, value) => {

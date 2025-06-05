@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios'
 
 // 配置axios
 const request = axios.create({
-  baseURL: 'http://localhost:8081',  // 端口改为8081
+  baseURL: 'http://localhost:8080',  
   timeout: 5000
 })
 
@@ -187,49 +187,36 @@ export const getHomeworkWeight = async (homeworkId: number): Promise<ApiResponse
   }
 }
 
-// 新增：考勤相关接口参数定义
-interface AttendanceRecord {
+
+
+// 考勤处理参数定义（包含比例）
+interface AttendanceProcessParams {
   studentName: string;
   courseName: string;
   score: number;
+  ratio: number; // 考勤比例（0-100）
 }
 
-interface SetAttendanceWeightParams {
+//处理考勤记录接口（包含分数和比例）
+// 考勤处理参数定义
+interface AttendanceProcessParams {
+  studentId: number; 
   courseName: string;
-  weight: number;
+  score: number;
+  ratio: number; // 考勤比例（0-100）
 }
 
-// 新增：获取教师课程列表接口
-export const getTeacherCourses = async (teacherName: string): Promise<ApiResponse<string[]>> => {
+// 处理考勤记录接口（参数同步修改）
+export const processAttendanceRecord = async (params: AttendanceProcessParams): Promise<ApiResponse<boolean>> => {
   try {
-    const response = await request.get(`/api/attendance/courses?teacherName=${teacherName}`);
+    const response = await request.post('/api/attendance/process', params); 
     return response.data;
   } catch (error) {
-    throw new Error('获取教师课程列表失败');
+    throw new Error('处理考勤记录失败');
   }
 };
 
-// 新增：保存考勤记录接口
-export const saveAttendanceRecord = async (record: AttendanceRecord): Promise<ApiResponse<boolean>> => {
-  try {
-    const response = await request.post('/api/attendance/records', record);
-    return response.data;
-  } catch (error) {
-    throw new Error('保存考勤记录失败');
-  }
-};
-
-// 新增：设置考勤比例接口
-export const setAttendanceWeightApi = async (params: SetAttendanceWeightParams): Promise<ApiResponse<boolean>> => {
-  try {
-    const response = await request.post('/api/attendance/weight', params);
-    return response.data;
-  } catch (error) {
-    throw new Error('设置考勤比例失败');
-  }
-};
-
-// 导出新增接口
+// 导出接口更新
 export const teacherAPI = {
   getHomeworkList,
   getHomeworkSubmissions,
@@ -239,9 +226,7 @@ export const teacherAPI = {
   exportGrades,
   setHomeworkWeight,
   getHomeworkWeight,
-  getTeacherCourses,
-  saveAttendanceRecord,
-  setAttendanceWeightApi,
+  processAttendanceRecord, 
 };
 
 export default teacherAPI

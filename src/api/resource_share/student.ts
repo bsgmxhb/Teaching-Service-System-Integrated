@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8081';  // 端口改为8081
+const API_BASE_URL = 'http://localhost:8080';  // 端口改为8081
 
 const api = axios.create({
     baseURL: API_BASE_URL,
