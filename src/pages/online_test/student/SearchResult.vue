@@ -81,6 +81,17 @@
 <script setup>
 import { ref } from 'vue'
 import axios from 'axios'
+import { useuserLoginStore } from '../../../store/userLoginStore'
+
+const userStore = useuserLoginStore()
+
+// 创建api实例，与其他online_test模块使用相同的配置
+const api = axios.create({
+  baseURL: 'http://localhost:8080',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
 
 const courses = ref([])
 const selectedCourse = ref(null)
@@ -88,7 +99,7 @@ const tests = ref([])
 const selectedTest = ref(null)
 const studentScore = ref(null)
 const questionHeaders = ref([])
-const studentId = ref(1)//根据当前页面获取
+const studentId = ref(Number(userStore.loginUser.user_id) || 1) // 从用户状态获取学生ID
 const detailedScores = ref([])
 const hasQueried = ref(false)
 
@@ -99,7 +110,7 @@ function unwrapRef(r) {
 
 async function fetchCourses() {
   try {
-    const res = await axios.get(`/test/testPublish/getStudentCourses`,{
+    const res = await api.get(`/test/testPublish/getStudentCourses`,{
       params:{ studentId: unwrapRef(studentId) }
     })
     courses.value = res.data || []
@@ -120,7 +131,7 @@ async function handleCourseChange(courseId) {
 async function fetchTests(courseId) {
   if (!courseId) return
   try {
-    const res = await axios.get('/test/testPublish/getTestByCourseId', {
+    const res = await api.get('/test/testPublish/getTestByCourseId', {
       params: { courseId }
     })
     tests.value = res.data || []
@@ -156,7 +167,7 @@ async function fetchStudentScore() {
 
   try {
     // 获取所有学生分数用于计算排名
-    const res = await axios.get('/test/testPublish/getScoresByTestId', {
+    const res = await api.get('/test/testPublish/getScoresByTestId', {
       params: {
         courseId: selectedCourse.value,
         testId: selectedTest.value,
@@ -184,7 +195,7 @@ async function fetchStudentScore() {
     }
 
     // 获取该学生的答题记录
-    const ansRes = await axios.get('/test/testPublish/getQuestionsByTestIdIfAnswered', {
+    const ansRes = await api.get('/test/testPublish/getQuestionsByTestIdIfAnswered', {
       params: {
         testId: selectedTest.value,
         studentId: studentId.value

@@ -111,6 +111,20 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import { computed } from 'vue'
+import { useuserLoginStore } from '../../../store/userLoginStore'
+
+const userStore = useuserLoginStore()
+
+// 创建api实例，与其他online_test模块使用相同的配置
+const api = axios.create({
+  baseURL: 'http://localhost:8080',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+// 从用户状态获取教师ID
+const teacherId = ref(Number(userStore.loginUser.user_id) || 29)
 
 // 数据绑定
 const courses = ref([])
@@ -125,7 +139,7 @@ const hasQueried = ref(false)
 // 获取教师所有课程
 async function fetchCourses() {
   try {
-    const res = await axios.get(`/test/questions/course/29`)
+    const res = await api.get(`/test/questions/course/${teacherId.value}`)
     courses.value = res.data || []
   } catch (error) {
     console.error('获取课程失败:', error)
@@ -146,7 +160,7 @@ async function handleCourseChange(courseId) {
 async function fetchTests(courseId) {
   if (!courseId) return
   try {
-    const res = await axios.get('/test/testPublish/getTestByCourseId', {
+    const res = await api.get('/test/testPublish/getTestByCourseId', {
       params: { courseId },
     })
     console.log('考试：', res.data)
@@ -188,7 +202,7 @@ async function applyFilters() {
 
   try {
     // 第一步：获取总成绩列表
-    const res = await axios.get('/test/testPublish/getScoresByTestId', {
+    const res = await api.get('/test/testPublish/getScoresByTestId', {
       params: {
         courseId: selectedCourse.value,
         testId: selectedTest.value,
@@ -201,7 +215,7 @@ async function applyFilters() {
     const withAnswers = await Promise.all(
         rawScores.map(async (student) => {
           try {
-            const ansRes = await axios.get('/test/testPublish/getQuestionsByTestIdIfAnswered', {
+            const ansRes = await api.get('/test/testPublish/getQuestionsByTestIdIfAnswered', {
               params: {
                 testId: selectedTest.value,
                 studentId: student.student_id

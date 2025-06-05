@@ -24,15 +24,26 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import axios from 'axios' // 添加axios导入
+import axios from 'axios'
+import { useuserLoginStore } from '../../../store/userLoginStore'
 
 const route = useRoute()
 const router = useRouter()
+const userStore = useuserLoginStore()
+
+// 创建api实例，与其他online_test模块使用相同的配置
+const api = axios.create({
+  baseURL: 'http://localhost:8080',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
 
 const test_id = ref(route.params.test_id) // 保持变量名一致
 const loading = ref(false)
 const exam = ref(null)
 const error = ref(null)
+const studentId = ref(Number(userStore.loginUser.user_id) || 1) // 从用户状态获取学生ID
 
 // 格式化日期
 const formatDate = (timestamp) => {
@@ -45,7 +56,7 @@ const fetchExamData = async () => {
   loading.value = true
   console.log('正在请求考试数据，testId:', test_id.value) // 调试
   try {
-    const response = await axios.get(`/test/testPublish/getTestByTestId`, {
+    const response = await api.get(`/test/testPublish/getTestByTestId`, {
       params: { testId: test_id.value }
     })
     console.log('API响应数据:', response.data) // 调试

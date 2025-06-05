@@ -132,6 +132,21 @@
 <script setup>
 import { ref } from 'vue'
 import axios from 'axios'
+import { ElMessage } from 'element-plus'
+import { useuserLoginStore } from '../../../store/userLoginStore'
+
+const userStore = useuserLoginStore()
+
+// 创建api实例，与其他online_test模块使用相同的配置
+const api = axios.create({
+  baseURL: 'http://localhost:8080',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+// 从用户状态获取教师ID
+const teacherId = ref(Number(userStore.loginUser.user_id) || 29)
 
 // 数据绑定
 const courses = ref([])
@@ -162,10 +177,11 @@ const newQuestion = ref({
 // 获取教师所有课程
 async function fetchCourses() {
   try {
-    const res = await axios.get(`/test/questions/course/29`)
+    const res = await api.get(`/test/questions/course/${teacherId.value}`)
     courses.value = res.data || []
   } catch (error) {
     console.error('获取课程失败:', error)
+    ElMessage.error('获取课程失败')
   }
 }
 
@@ -173,7 +189,7 @@ async function fetchCourses() {
 async function fetchChapters(courseId) {
   if (!courseId) return;
   try {
-    const res = await axios.get('/test/questions/getQuestionByCourse', {
+    const res = await api.get('/test/questions/getQuestionByCourse', {
       params: { courseId },
     });
 
@@ -187,6 +203,7 @@ async function fetchChapters(courseId) {
     questions.value = [];
   } catch (error) {
     console.error('获取章节失败:', error);
+    ElMessage.error('获取章节失败')
   }
 }
 
@@ -194,7 +211,7 @@ async function fetchChapters(courseId) {
 async function applyFilters() {
   if (!selectedCourse.value || !selectedChapter.value) return
   try {
-    const res = await axios.get('/test/questions/searchQuestions', {
+    const res = await api.get('/test/questions/searchQuestions', {
       params: {
         courseId: selectedCourse.value,
         bankId: selectedChapter.value,
@@ -211,18 +228,21 @@ async function applyFilters() {
     }))
   } catch (error) {
     console.error('查询题目失败:', error)
+    ElMessage.error('查询题目失败')
   }
 }
 
 // 删除题目
 async function deleteQuestion(questionId) {
   try {
-    await axios.delete('/test/questions/delQuestion', {
+    await api.delete('/test/questions/delQuestion', {
       params: { question_id: questionId }
     })
     questions.value = questions.value.filter(q => q.question_id !== questionId)
+    ElMessage.success('删除成功')
   } catch (error) {
     console.error('删除题目失败:', error)
+    ElMessage.error('删除题目失败')
   }
 }
 
@@ -252,17 +272,17 @@ async function saveEdit() {
       options: optionsArray // 添加选项字段
     };
 
-    await axios.post('/test/questions/addQuestion', payload);
-    await axios.delete('/test/questions/delQuestion', {
+    await api.post('/test/questions/addQuestion', payload);
+    await api.delete('/test/questions/delQuestion', {
       params: { question_id: oldQuestionId }
     });
 
-
     editDialogVisible.value = false;
     applyFilters();
-
+    ElMessage.success('编辑成功')
   } catch (error) {
     console.error('编辑题目失败:', error);
+    ElMessage.error('编辑题目失败')
   }
 }
 
@@ -297,11 +317,13 @@ async function saveNewQuestion() {
       options: optionsArray // 添加选项字段
     };
 
-    await axios.post('/test/questions/addQuestion', payload);
+    await api.post('/test/questions/addQuestion', payload);
     addDialogVisible.value = false;
     applyFilters();
+    ElMessage.success('添加成功')
   } catch (error) {
     console.error('新增题目失败:', error);
+    ElMessage.error('新增题目失败')
   }
 }
 

@@ -81,11 +81,22 @@ import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { Loading } from '@element-plus/icons-vue'
+import { useuserLoginStore } from '../../../store/userLoginStore'
 
 const route = useRoute()
 const router = useRouter()
+const userStore = useuserLoginStore()
+
+// 创建api实例，与其他online_test模块使用相同的配置
+const api = axios.create({
+  baseURL: 'http://localhost:8080',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
 const testId = route.params.test_id
-const studentId = ref(1) // 应从登录信息获取真实学生ID
+const studentId = ref(Number(userStore.loginUser.user_id) || 1) // 从用户状态获取学生ID
 const isTeacher = false // 根据实际需求设置
 
 // 考试数据相关
@@ -130,7 +141,7 @@ const fetchTestInfoAndQuestions = async () => {
   error.value = null
   try {
     // 获取考试信息
-    const testInfoResponse = await axios.get('/test/testPublish/getTestByTestId', {
+    const testInfoResponse = await api.get('/test/testPublish/getTestByTestId', {
       params: {
         testId: testId
       }
@@ -147,7 +158,7 @@ const fetchTestInfoAndQuestions = async () => {
     }
 
     // 获取考试题目
-    const questionsResponse = await axios.get('/test/testPublish/getQuestionsByTestId', {
+    const questionsResponse = await api.get('/test/testPublish/getQuestionsByTestId', {
       params: {
         testId: testId,
         isTeacher: isTeacher
@@ -299,7 +310,7 @@ const submitAllAnswers = async () => {
     console.log('准备提交的数据:', JSON.stringify(answersToSubmit, null, 2))
     
     // 批量提交所有答案
-    const response = await axios.post('/test/answer/submitBatch', answersToSubmit, {
+    const response = await api.post('/test/answer/submitBatch', answersToSubmit, {
       headers: {
         'Content-Type': 'application/json'
       }
