@@ -7,10 +7,6 @@ export default defineConfig({
   server: {
     // send all requests with /api to the backend
     proxy: {
-      '/course_selection': {
-        target: 'http://localhost:8080',
-        changeOrigin: true,
-      },
       '/test': {
         target: 'http://localhost:8080',
         changeOrigin: true,

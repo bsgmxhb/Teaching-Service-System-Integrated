@@ -245,6 +245,11 @@ const saveChanges = async () => {
     await updateCurrentUserProfile(updatedData);
     showNotification("个人信息已成功更新！", "success");
     isEditing.value = false;
+    await fetchUserProfile();
+    loginUserStore.loginUser.name = studentProfileData.value.name;
+    loginUserStore.loginUser.department = studentProfileData.value.department;
+    loginUserStore.loginUser.contact = studentProfileData.value.contact;
+    loginUserStore.loginUser.avatarPath = studentProfileData.value.avatarPath;
   } catch (error) {
     showNotification("保存更改失败，请稍后重试。", "error");
   }

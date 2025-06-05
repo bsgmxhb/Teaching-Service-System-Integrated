@@ -29,7 +29,7 @@
             <el-option
                 v-for="test in tests"
                 :key="test.test_id"
-                :label="`第 ${test.test_id} 次测试`"
+                :label="`${test.test_name}`"
                 :value="test.test_id"
             />
           </el-select>

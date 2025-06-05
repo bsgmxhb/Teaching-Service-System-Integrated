@@ -68,12 +68,12 @@ export interface GetTeacherCourseResultResponse {
 export const getTeacherCourseResults = async (teacher_id: number): Promise<GetTeacherCourseResultResponse> => {
     try {
         // 使用已确认的完整路径
-        const responseData = await api.get<GetTeacherCourseResultResponse>('/course_selection/teacher/getresult', {
+        const responseData = await api.get<GetTeacherCourseResultResponse>('/api/course_selection/teacher/getresult', {
             params: {
                 teacher_id,
             },
         });
-        return responseData.data;
+        return responseData;
     } catch (error) {
         throw error;
     }
