@@ -25,7 +25,7 @@ export const permitError = ref('');
 export async function acquireSelectionPermit(studentId: number): Promise<boolean> {
   console.log(`[选课权限] 尝试获取学生(${studentId})的选课权限...`);
   try {
-    const response = await api.post(`/course_selection/permit/acquire`, {
+    const response = await api.post(`/api/course_selection/permit/acquire`, {
       student_id: studentId
     });
     
@@ -64,7 +64,7 @@ export async function releaseSelectionPermit(studentId: number): Promise<void> {
   
   console.log(`[选课权限] 释放学生(${studentId})的选课权限...`);
   try {
-    const response = await api.post(`/course_selection/permit/release`, {
+    const response = await api.post(`/api/course_selection/permit/release`, {
       student_id: studentId
     });
     
@@ -89,7 +89,7 @@ export async function releaseSelectionPermit(studentId: number): Promise<void> {
 // 获取当前选课计数
 export async function getSelectionCount(): Promise<void> {
   try {
-    const response = await api.get(`/course_selection/permit/count`);
+    const response = await api.get(`/api/course_selection/permit/count`);
     if (response.data.code === 200) {
       selectionStatus.value.currentCount = response.data.data.current_count;
       selectionStatus.value.maxCount = response.data.data.max_count;
@@ -127,7 +127,7 @@ export function useSelectionPermit(studentId: number, onPermitFailed?: (errorMsg
     if (selectionStatus.value.hasPermit) {
       console.log(`[选课权限] 页面关闭，使用beacon释放学生(${studentId})的选课权限`);
       // 发送同步请求以确保在页面关闭前释放权限
-      navigator.sendBeacon(`${API_BASE_URL}/course_selection/permit/release?student_id=${studentId}`);
+      navigator.sendBeacon(`${API_BASE_URL}/api/course_selection/permit/release?student_id=${studentId}`);
     }
   });
   

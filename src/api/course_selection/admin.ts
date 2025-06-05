@@ -197,7 +197,7 @@ const handleError = (error: unknown) => {
 // 获取选课系统时间设置
 export const getTimeSettings = async (): Promise<TimeSettingsResponse> => {
     try {
-        const axiosresponse = await api.get('/course_selection/manager/get_time');
+        const axiosresponse = await api.get('/api/course_selection/manager/get_time');
         return axiosresponse.data;
     } catch (error) {
         handleError(error);
@@ -208,7 +208,7 @@ export const getTimeSettings = async (): Promise<TimeSettingsResponse> => {
 // 更新选课系统时间设置
 export const updateTimeSettings = async (params: UpdateTimeSettingsRequest): Promise<UpdateTimeSettingsResponse> => {
     try {
-        const axiosresponse = await api.post('/course_selection/manager/update_time', params);
+        const axiosresponse = await api.post('/api/course_selection/manager/update_time', params);
         return axiosresponse.data;
     } catch (error) {
         handleError(error);
@@ -219,7 +219,7 @@ export const updateTimeSettings = async (params: UpdateTimeSettingsRequest): Pro
 // 获取学生已选课程
 export const getStudentCourses = async (studentId: number): Promise<StudentCoursesResponse> => {
   try {
-    const axiosresponse = await api.get('/course_selection/student/show_selected_courses', {
+    const axiosresponse = await api.get('/api/course_selection/student/show_selected_courses', {
       params: { student_id: studentId }
     });
     return axiosresponse.data;
@@ -234,7 +234,7 @@ export const getStudentCourses = async (studentId: number): Promise<StudentCours
 // 管理员为学生手动选课
 export const adminChooseCourseForStudent = async (params: AdminChooseCourseRequest): Promise<AdminChooseCourseResponse> => {
   try {
-    const axiosresponse = await api.post('/course_selection/manager/choose_course', params);
+    const axiosresponse = await api.post('/api/course_selection/manager/choose_course', params);
     return axiosresponse.data;
   } catch (error) {
     handleError(error);
@@ -245,7 +245,7 @@ export const adminChooseCourseForStudent = async (params: AdminChooseCourseReque
 // 补选申请相关接口
 export const getSuppApplications = async (params: GetSuppApplicationsRequest): Promise<GetSuppApplicationsResponse> => {
   try {
-    const axiosresponse = await api.get('/course_selection/manager/get_supplement', {
+    const axiosresponse = await api.get('/api/course_selection/manager/get_supplement', {
       params: params
     });
     return axiosresponse.data;
@@ -258,7 +258,7 @@ export const getSuppApplications = async (params: GetSuppApplicationsRequest): P
 // 处理补选申请
 export const processSupplementary = async (params: ProcessSuppRequest): Promise<ProcessSuppResponse> => {
   try {
-    const axiosresponse = await api.post('/course_selection/manager/submit_supplement', params);
+    const axiosresponse = await api.post('/api/course_selection/manager/submit_supplement', params);
     return axiosresponse.data;
   } catch (error) {
     handleError(error);
@@ -269,7 +269,7 @@ export const processSupplementary = async (params: ProcessSuppRequest): Promise<
 // 获取专业培养方案
 export const getCurriculum = async (major_name: string): Promise<CurriculumResponse> => {
   try {
-    const axiosresponse = await api.get('/course_selection/get_curriculum', {
+    const axiosresponse = await api.get('/api/course_selection/get_curriculum', {
       params: { major_name }
     });
     return axiosresponse.data;
@@ -282,7 +282,7 @@ export const getCurriculum = async (major_name: string): Promise<CurriculumRespo
 // 设置专业培养方案
 export const setCurriculum = async (params: CurriculumRequest): Promise<{ code: string; message: string }> => {
   try {
-    const axiosresponse = await api.post('/course_selection/manager/set_curriculum', params);
+    const axiosresponse = await api.post('/api/course_selection/manager/set_curriculum', params);
     return axiosresponse.data;
   } catch (error) {
     handleError(error);
@@ -293,7 +293,7 @@ export const setCurriculum = async (params: CurriculumRequest): Promise<{ code: 
 // 课程搜索API实现
 export const searchCourse = async (params: SearchCourseRequest): Promise<SearchCourseResponse> => {
   try {
-    const axiosresponse = await api.get('/course_selection/search_course', { params });
+    const axiosresponse = await api.get('/api/course_selection/search_course', { params });
     return axiosresponse.data;
   } catch (error) {
     handleError(error);
@@ -303,7 +303,7 @@ export const searchCourse = async (params: SearchCourseRequest): Promise<SearchC
 
 export const getCourseTable = async (params: { course_id: number ,course_name: string ,category: string }): Promise<CourseTableResponse> => {
   try {
-    const axiosresponse = await api.get(`/course_selection/search_course_table`, {
+    const axiosresponse = await api.get(`/api/course_selection/search_course_table`, {
       params
     });
     return axiosresponse.data;

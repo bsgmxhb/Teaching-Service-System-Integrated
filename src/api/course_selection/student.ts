@@ -133,7 +133,7 @@ const handleError = (error: unknown) => {
 
 export const getMajorCurriculum = async (major_name: String): Promise<majorCurriculumQueryResponse> => {
     try {
-        const response = await api.get(`/course_selection/get_curriculum`, { params: { major_name } });
+        const response = await api.get(`/api/course_selection/get_curriculum`, { params: { major_name } });
         return response.data;
     } catch (error) {
         handleError(error);
@@ -144,7 +144,7 @@ export const getMajorCurriculum = async (major_name: String): Promise<majorCurri
 
 export const setPersonalCurriculum = async (params: personalCurriculumInfo): Promise<postResponse> => {
     try {
-        const response = await api.post(`/course_selection/student/set_personal_curriculum`, params);
+        const response = await api.post(`/api/course_selection/student/set_personal_curriculum`, params);
         return response.data;
     } catch (error) {
         handleError(error);
@@ -154,7 +154,7 @@ export const setPersonalCurriculum = async (params: personalCurriculumInfo): Pro
 
 export const getPersonalCurriculum = async (student_id: Number): Promise<studentCurriculumQueryResponse> => {
     try {
-        const response = await api.get(`/course_selection/student/get_personal_curriculum`, { params: { student_id } });
+        const response = await api.get(`/api/course_selection/student/get_personal_curriculum`, { params: { student_id } });
         return response.data;
     } catch (error) {
         handleError(error);
@@ -164,7 +164,7 @@ export const getPersonalCurriculum = async (student_id: Number): Promise<student
 
 export const searchCourse = async (params: courseQuery): Promise<courseQueryResponse> => {
     try {
-        const response = await api.get(`/course_selection/search_course`, { params });
+        const response = await api.get(`/api/course_selection/search_course`, { params });
         return response.data;
     } catch (error) {
         handleError(error);
@@ -175,7 +175,7 @@ export const searchCourse = async (params: courseQuery): Promise<courseQueryResp
 // 学生选课函数 (你之前可能命名不同)
 export const submitStudentCourseSelection = async (payload: StudentCourseActionPayload): Promise<postResponse> => {
     try {
-        const response = await api.post(`/course_selection/student/choose_course`, payload);
+        const response = await api.post(`/api/course_selection/student/choose_course`, payload);
         return response.data;
     } catch (error) {
         handleError(error);
@@ -185,7 +185,7 @@ export const submitStudentCourseSelection = async (payload: StudentCourseActionP
 
 export const chooseCourseSupp = async (params: supplementaryCourseQuery): Promise<postResponse> => {
     try {
-        const response = await api.post(`/course_selection/student/apply_supplement`, params);
+        const response = await api.post(`/api/course_selection/student/apply_supplement`, params);
         return response.data;
     } catch (error) {
         handleError(error);
@@ -195,7 +195,7 @@ export const chooseCourseSupp = async (params: supplementaryCourseQuery): Promis
 
 export const getSuppResult = async (student_id: Number): Promise<getSuppResultResponse> => {
     try {
-        const response = await api.get(`/course_selection/student/get_supp_result`, { params: { student_id } });
+        const response = await api.get(`/api/course_selection/student/get_supp_result`, { params: { student_id } });
         return response.data;
     } catch (error) {
         handleError(error);
@@ -211,7 +211,7 @@ export const getSuppResult = async (student_id: Number): Promise<getSuppResultRe
  */
 export const getStudentSelectedCourses = async (student_id: Number): Promise<courseQueryResponse> => {
     try {
-        const response = await api.get(`/course_selection/student/show_selected_courses`, {
+        const response = await api.get(`/api/course_selection/student/show_selected_courses`, {
             params: { student_id }
         });
         return response.data; // 假设响应结构与 courseQueryResponse 匹配
@@ -227,7 +227,7 @@ export const getStudentSelectedCourses = async (student_id: Number): Promise<cou
  */
 export const dropStudentCourse = async (payload: StudentCourseActionPayload): Promise<postResponse> => {
     try {
-        const response = await api.post(`/course_selection/student/drop_course`, payload);
+        const response = await api.post(`/api/course_selection/student/drop_course`, payload);
         return response.data;
     } catch (error) {
         handleError(error);
