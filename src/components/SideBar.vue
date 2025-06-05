@@ -9,7 +9,12 @@
     size="250px"
     header-class="custom-drawer-header"
   >
+  <el-divider />
     <el-menu :default-active="activeModule.get()" @select="handleSelect">
+        <el-menu-item index="favorite">
+        <el-icon><Star /></el-icon>
+        <span>我的收藏</span>
+      </el-menu-item>
       <el-menu-item index="infoManagement">
         <el-icon><Setting /></el-icon>
         <span>信息管理</span>

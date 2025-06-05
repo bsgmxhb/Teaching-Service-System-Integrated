@@ -7,7 +7,7 @@
       </el-icon>
       <el-icon size="30px" v-if="!is_homepage.get()" @click="goToHome()" class="back-icon"><Back /></el-icon>
       <span class="system-name">{{ pageTitle }}</span>
-      <span class="sub-system-name" v-if="is_homepage.get() && user !== 'invalid'">{{ relfect_name(activeModule.get()) }}子模块</span>
+      <span class="sub-system-name" v-if="is_homepage.get() && user !== 'invalid'">{{ relfect_name(activeModule.get()) }}</span>
     </div>
 
     <!-- 右侧用户信息 -->
@@ -296,16 +296,18 @@ const pageTitle = computed(() => {
 
 const relfect_name = (module) => {
   switch (module) {
+    case 'favorite':
+      return '我的收藏'
     case 'infoManagement':
-      return '信息管理'
+      return '信息管理子模块'
     case 'courseArrangement':
-      return '课程安排'
+      return '课程安排子模块'
     case 'courseSelection':
-      return '课程选择'
+      return '课程选择子模块'
     case 'onlineQuiz':
-      return '在线测验'
+      return '在线测验子模块'
     case 'resourceSharing':
-      return '课程资源共享'
+      return '课程资源共享子模块'
   }
 }
 </script>
