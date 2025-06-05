@@ -97,8 +97,18 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import { useuserLoginStore } from '../../../store/userLoginStore'
 
 const router = useRouter()
+const userStore = useuserLoginStore()
+
+// 创建api实例，与其他online_test模块使用相同的配置
+const api = axios.create({
+  baseURL: 'http://localhost:8080',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
 
 // 响应式数据
 const loadingCourses = ref(false)
@@ -107,8 +117,7 @@ const courses = ref([])
 const selectedCourse = ref('')
 const exams = ref([])
 const error = ref(null)
-const teacherId = ref(29) // 假设学生ID为1，实际应从登录信息获取
-const studentId = ref(1) // 假设学生ID为1，实际应从登录信息获取
+const studentId = ref(Number(userStore.loginUser.user_id) || 1) // 从store获取user_id并转换为数字
 
 // 格式化日期
 const formatDate = (timestamp) => {
@@ -132,7 +141,7 @@ const fetchCourses = async () => {
   loadingCourses.value = true
   error.value = null
   try {
-    const response = await axios.get(`/test/testPublish/getStudentCourses`,{
+    const response = await api.get(`/test/testPublish/getStudentCourses`,{
       params: {
         studentId: studentId.value,
       }
@@ -155,7 +164,7 @@ const fetchExams = async () => {
   loadingExams.value = true
   error.value = null
   try {
-    const response = await axios.get('/test/testPublish/getTestForStudent', {
+    const response = await api.get('/test/testPublish/getTestForStudent', {
       params: {
         studentId: studentId.value,
         courseId: selectedCourse.value
@@ -180,9 +189,17 @@ const enterExam = (exam) => {
   }
 }
 
-// 组件挂载时获取课程列表
+// 添加监听，当用户ID变化时重新获取课程
 onMounted(() => {
-  fetchCourses()
+  // 确认用户ID可用后再获取课程
+  if (userStore.loginUser && userStore.loginUser.user_id !== 'null') {
+    studentId.value = Number(userStore.loginUser.user_id)
+    console.log('当前用户ID:', studentId.value)
+    fetchCourses()
+  } else {
+    console.warn('用户未登录或ID不可用')
+    ElMessage.warning('请先登录系统')
+  }
 })
 </script>
 
