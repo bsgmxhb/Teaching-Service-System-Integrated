@@ -26,7 +26,7 @@ watchEffect(() => {
     is_homepage.value = true;
     user_name.value = currentUser.name;
     user_id.value = currentUser.user_id;
-    user_avatar.value = currentUser.avatar_path && currentUser.avatar_path !== 'null' ? currentUser.avatar_path : 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png';
+    user_avatar.value = currentUser.avatar_path && currentUser.avatar_path !== 'null' ? "http://localhost:8080" + currentUser.avatar_path : 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png';
 
     // Map role
     switch (currentUser.role) {
