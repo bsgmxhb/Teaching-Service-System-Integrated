@@ -42,7 +42,11 @@
         <el-table-column prop="course_name" label="课程名称" />
         <el-table-column prop="teacher_name" label="授课教师" />
         <el-table-column prop="credit" label="学分" width="80" />
-        <el-table-column prop="class_time" label="上课时间" />
+        <el-table-column prop="class_time" label="上课时间">
+          <template #default="scope">
+            {{ reflectTime(scope.row.class_time) }}
+          </template>
+        </el-table-column>
         <el-table-column prop="classroom" label="上课教室" />
         <el-table-column label="课程容量">
           <template #default="scope">
@@ -78,7 +82,7 @@
           <el-descriptions-item label="课程 ID">{{ selectedCourse.course_id }}</el-descriptions-item>
           <el-descriptions-item label="授课教师">{{ selectedCourse.teacher_name }}</el-descriptions-item>
           <el-descriptions-item label="课程学分">{{ selectedCourse.credit }}</el-descriptions-item>
-          <el-descriptions-item label="上课时间">{{ selectedCourse.class_time }}</el-descriptions-item>
+          <el-descriptions-item label="上课时间">{{ reflectTime(selectedCourse.class_time) }}</el-descriptions-item>
           <el-descriptions-item label="上课教室">{{ selectedCourse.classroom }}</el-descriptions-item>
           <el-descriptions-item label="课程容量">{{ selectedCourse.available_capacity }} / {{ selectedCourse.total_capacity }}</el-descriptions-item>
           <el-descriptions-item label="课程描述">{{ selectedCourse.course_description }}</el-descriptions-item>
@@ -170,6 +174,28 @@ const showCourseDetails = (course) => {
   selectedCourse.value = course;
   dialogVisible.value = true;
 };
+
+// Monday 1; Monday 2 ==> 周一1-2节
+// Tuesday 1; Tuesday 2; Tuesday 3 ==> 周二1-3节
+const reflectTime = (time) => {
+  const timeArray = time.split(';');
+  const firstTime = timeArray[0].trim();
+  const lastTime = timeArray[timeArray.length - 1].trim();
+
+  const chineseDay = {
+    'Monday': '周一',
+    'Tuesday': '周二',
+    'Wednesday': '周三',
+    'Thursday': '周四',
+    'Friday': '周五',
+    'Saturday': '周六',
+    'Sunday': '周日'
+  }
+
+  const day = chineseDay[firstTime.split(' ')[0]];
+  const period = `${firstTime.split(' ')[1]}-${lastTime.split(' ')[1]}`;
+  return `${day} ${period}节`;
+}
 </script>
 
 <style scoped>

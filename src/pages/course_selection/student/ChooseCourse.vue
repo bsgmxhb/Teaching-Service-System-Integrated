@@ -91,35 +91,27 @@
 
   const studentId = inject('user_id'); //
 
-  // 新增：英文星期到中文的映射函数
-  const mapDayToChinese = (classTime) => {
-    if (!classTime || typeof classTime !== 'string') {
-      return classTime; // 如果输入无效，返回原值
-    }
-    const dayMappings = {
-      "Monday": "周一",
-      "Tuesday": "周二",
-      "Wednesday": "周三",
-      "Thursday": "周四",
-      "Friday": "周五",
-      "Saturday": "周六",
-      "Sunday": "周日"
-    };
+  /// Monday 1; Monday 2 ==> 周一1-2节
+// Tuesday 1; Tuesday 2; Tuesday 3 ==> 周二1-3节
+const reflectTime = (time) => {
+  const timeArray = time.split(';');
+  const firstTime = timeArray[0].trim();
+  const lastTime = timeArray[timeArray.length - 1].trim();
 
-    const entries = classTime.split(';');
-    const chineseEntries = entries.map(entry => {
-      const parts = entry.trim().match(/^([A-Za-z]+)\s*(.*)$/);
-      if (parts && parts.length === 3) {
-        const dayEng = parts[1];
-        const slots = parts[2];
-        const normalizedDayEng = dayEng.charAt(0).toUpperCase() + dayEng.slice(1).toLowerCase();
-        const dayChinese = dayMappings[normalizedDayEng];
-        return dayChinese ? `${dayChinese} ${slots}` : entry;
-      }
-      return entry;
-    });
-    return chineseEntries.join('; ');
-  };
+  const chineseDay = {
+    'Monday': '周一',
+    'Tuesday': '周二',
+    'Wednesday': '周三',
+    'Thursday': '周四',
+    'Friday': '周五',
+    'Saturday': '周六',
+    'Sunday': '周日'
+  }
+
+  const day = chineseDay[firstTime.split(' ')[0]];
+  const period = `${firstTime.split(' ')[1]}-${lastTime.split(' ')[1]}`;
+  return `${day} ${period}节`;
+}
 
   const fetchCourses = async () => {
     if (!studentId.value) {
@@ -142,7 +134,7 @@
         // 在这里应用转换函数
         courseList.value = response.data.course_list.map(course => ({
           ...course,
-          class_time: mapDayToChinese(course.class_time) // 转换上课时间
+          class_time: reflectTime(course.class_time) // 转换上课时间
         }));
         if (courseList.value.length === 0) { //
           ElMessage.info('培养方案中未找到符合当前搜索条件的课程，或培养方案为空。'); // 

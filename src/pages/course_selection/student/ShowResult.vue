@@ -10,7 +10,11 @@
         <p v-if="!loading && selectedCourses.length > 0 && currentFetchedId" style="text-align: center; margin-bottom: 15px;">
           以下是您的已选课程列表 </p>
 
-        <el-table :data="selectedCourses" style="font-size: 15px;" v-loading="loading"> <el-table-column prop="course_id" label="课程ID" width="120" /> <el-table-column prop="course_name" label="课程名称" /> <el-table-column prop="teacher_name" label="授课教师" /> <el-table-column prop="credit" label="学分" width="80" /> <el-table-column prop="class_time" label="上课时间" /> <el-table-column prop="classroom" label="上课教室" /> <el-table-column label="操作" width="120">
+        <el-table :data="selectedCourses" style="font-size: 15px;" v-loading="loading"> <el-table-column prop="course_id" label="教学班ID" width="120" /> <el-table-column prop="course_name" label="课程名称" /> <el-table-column prop="teacher_name" label="授课教师" /> <el-table-column prop="credit" label="学分" width="80" /> <el-table-column prop="class_time" label="上课时间">
+          <template #default="scope">
+            {{ reflectTime(scope.row.class_time) }}
+          </template>
+        </el-table-column> <el-table-column prop="classroom" label="上课教室" /> <el-table-column label="操作" width="120">
             <template #default="scope"> <el-button
                 type="danger"
                 size="small"
@@ -28,7 +32,7 @@
         <el-empty v-if="!loading && selectedCourses.length === 0 && hasFetched && currentFetchedId" description="该学生暂无选课结果或ID对应学生不存在，无法生成课表" /> <el-empty v-if="!loading && !currentFetchedId && !hasFetched" description="正在等待学生信息加载..." /> </el-card>
 
       <el-dialog v-model="timetableDialogVisible" title="学生课表" width="85%" top="5vh"> <div id="timetable-to-print" style="padding: 10px;">
-          <h3 style="text-align: center; margin-bottom: 15px;"> 学生ID: {{ currentFetchedId }} 的课表 </h3>
+          <h3 style="text-align: center; margin-bottom: 15px;"> {{ user_name }}的课表 </h3>
           <el-table
             :data="timetableForDisplay"
             border
@@ -69,7 +73,8 @@
   import html2canvas from 'html2canvas';
 
   const injectedStudentId = inject('user_id');
-
+  const user = inject('user');
+  const user_name = inject('user_name');
   const currentFetchedId = ref('');
   const selectedCourses = ref([]); //
   const loading = ref(false); //
@@ -126,6 +131,18 @@
     });
     return chineseEntries.join('; ');
   };
+
+  // Monday 1; Monday 2 ==> 周一1-2节
+// Tuesday 1; Tuesday 2; Tuesday 3 ==> 周二1-3节
+const reflectTime = (time) => {
+  const timeArray = time.split(';');
+  const firstTime = timeArray[0].trim();
+  const lastTime = timeArray[timeArray.length - 1].trim();
+
+  const day = firstTime.split(' ')[0];
+  const period = `${firstTime.split(' ')[1]}-${lastTime.split(' ')[1]}`;
+  return `${day} ${period}节`;
+}
 
 
   const parseAndPlaceCourses = () => {
@@ -348,7 +365,7 @@
       const yOffset = margin + (availableHeight - imgHeight) / 2; //
 
       pdf.addImage(imgData, 'PNG', xOffset, yOffset, imgWidth, imgHeight); //
-      pdf.save(`课表-学生ID-${currentFetchedId.value || '未知'}.pdf`); //
+      pdf.save(`课表-${user_name.value}-${currentFetchedId.value || '未知'}.pdf`); //
       ElMessage.success('课表PDF已开始下载'); //
     } catch (error) { //
       console.error('打印课表失败:', error); //
