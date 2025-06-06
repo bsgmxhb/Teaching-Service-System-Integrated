@@ -5,16 +5,38 @@ import { AxiosResponse } from "axios";
 
 export const useuserLoginStore = defineStore("userLogin", {
   state: () => {
-    const loginUser: Ref<any, any> = ref({
-      user_id: "null",
-      name: "未登录",
-      account: "null",
-      role: "null",
-      department: "null",
-      contact: "null",
-      avatar_path: "null",
-      token: "null",
-    });
+    const getInitialUser = () => {
+      const defaultUser = {
+        user_id: "null",
+        name: "未登录",
+        account: "null",
+        role: "null",
+        department: "null",
+        contact: "null",
+        avatar_path: "null",
+        token: "null",
+      };
+
+      const itemStr = localStorage.getItem("loginUser");
+      if (!itemStr) {
+        return defaultUser;
+      }
+
+      try {
+        const item = JSON.parse(itemStr);
+        const now = new Date();
+        // 检查时间戳是否过期
+        if (now.getTime() < item.expiry && item.user) {
+          return item.user;
+        }
+      } catch (e) {
+        console.error("从localStorage解析用户数据时出错:", e);
+      }
+
+      localStorage.removeItem("loginUser");
+      return defaultUser;
+    };
+    const loginUser: Ref<any, any> = ref(getInitialUser());
 
     const unLoginUser: Ref<any, any> = ref({
       user_id: "null",
@@ -57,6 +79,14 @@ export const useuserLoginStore = defineStore("userLogin", {
           loginUser.value.contact = res.data.data.userInfo.contact;
           loginUser.value.avatar_path = res.data.data.userInfo.avatarPath;
           loginUser.value.token = res.data.data.token;
+          const now = new Date();
+          // 设置10分钟后过期
+          const expiry = now.getTime() + 10 * 60 * 1000;
+          const itemToStore = {
+            user: loginUser.value,
+            expiry: expiry,
+          };
+          localStorage.setItem("loginUser", JSON.stringify(itemToStore));
           console.log("用户登录状态已更新:", loginUser.value);
           return true;
         } else {
@@ -82,6 +112,7 @@ export const useuserLoginStore = defineStore("userLogin", {
       loginUser.value.contact = "null";
       loginUser.value.avatar_path = "null";
       loginUser.value.token = "null";
+      localStorage.removeItem("loginUser");
     }
 
     return { loginUser, setLoginUser, setLoginUserUnlogin };
