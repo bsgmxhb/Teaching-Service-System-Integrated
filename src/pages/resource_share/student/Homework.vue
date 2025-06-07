@@ -175,7 +175,7 @@ export interface Homework {
   weight?: number | null; // 新增作业占比
 }
 
-import studentAPI from '../../../api/student'
+import studentAPI from '../../../api/resource/student'
 
 const studentId = ref('')
 const courseId = ref('')
