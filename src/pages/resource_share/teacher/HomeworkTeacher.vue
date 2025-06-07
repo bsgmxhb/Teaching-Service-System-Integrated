@@ -174,7 +174,7 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted, computed } from 'vue'
 import { ElMessage } from 'element-plus'
-import { teacherAPI } from '../../api/teacher'
+import { teacherAPI } from '../../../api/resource_share/teacher'
 
 const allCourses = ref<any[]>([])
 const courseHomeworkList = ref<any[]>([])
